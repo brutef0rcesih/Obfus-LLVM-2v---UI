@@ -12,10 +12,12 @@ const ParametersStep = ({ uploadedFile, onNext, onBack }) => {
     controlFlow: true,
     instructionSubstitution: true,
     stringEncryption: true,
+    bogus: false,
+    keyFunctionVirtualization: false,
+    opaque: false,
+    preprocessorTrickery: false,
     
-    // Quantum-Resistant Settings
-    quantumAlgorithm: 'dilithium',
-    securityCategory: 'cat-3',
+ 
     
     // AI-Adversarial Protection
     targetModels: ['chatgpt-4', 'claude-3', 'github-copilot'],
@@ -150,26 +152,51 @@ const ParametersStep = ({ uploadedFile, onNext, onBack }) => {
                 />
                 <span className="text-xs font-medium text-gray-700">String Encryption</span>
               </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={parameters.bogus}
+                  onChange={(e) => handleParameterChange('bogus', e.target.checked)}
+                  className="w-3 h-3 border-2 border-gray-400"
+                />
+                <span className="text-xs font-medium text-gray-700">Bogus Control Flow</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={parameters.keyFunctionVirtualization}
+                  onChange={(e) => handleParameterChange('keyFunctionVirtualization', e.target.checked)}
+                  className="w-3 h-3 border-2 border-gray-400"
+                />
+                <span className="text-xs font-medium text-gray-700">Key Function Virtualization</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={parameters.opaque}
+                  onChange={(e) => handleParameterChange('opaque', e.target.checked)}
+                  className="w-3 h-3 border-2 border-gray-400"
+                />
+                <span className="text-xs font-medium text-gray-700">Opaque Predicates</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={parameters.preprocessorTrickery}
+                  onChange={(e) => handleParameterChange('preprocessorTrickery', e.target.checked)}
+                  className="w-3 h-3 border-2 border-gray-400"
+                />
+                <span className="text-xs font-medium text-gray-700">PreProcessor Trickery</span>
+              </label>
             </div>
           </div>
 
-          {/* Quantum-Resistant Settings */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-gray-900 border-b-2 border-gray-400 pb-1">Quantum-Resistant Settings</h3>
-            
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Algorithm Selection</label>
-              <select
-                value={parameters.quantumAlgorithm}
-                onChange={(e) => handleParameterChange('quantumAlgorithm', e.target.value)}
-                className="w-full px-2 py-1 text-xs border-2 border-gray-400 bg-white"
-              >
-                <option value="crystals-kyber">CRYSTALS-Kyber</option>
-                <option value="dilithium">Dilithium</option>
-                <option value="sphincs">SPHINCS+</option>
-                <option value="falcon">FALCON</option>
-              </select>
-            </div>
+          
+        
 
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Security Category</label>
@@ -183,7 +210,7 @@ const ParametersStep = ({ uploadedFile, onNext, onBack }) => {
                 <option value="cat-5">Category 5 (AES-256)</option>
               </select>
             </div>
-          </div>
+          
 
    
 

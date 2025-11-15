@@ -81,13 +81,6 @@ function Obfuscation() {
     setLogs([])
     
     try {
-      // Check if string encryption is enabled
-      if (!params.stringEncryption) {
-        alert('String Encryption must be enabled to use this backend obfuscation.')
-        setCurrentStep('parameters')
-        return
-      }
-      
       // Verify we have a filename
       if (!uploadedFileName) {
         alert('No file uploaded. Please upload a file first.')
