@@ -2,7 +2,10 @@
 
 ## Overview
 
-This is a full-stack application for LLVM-based code obfuscation with string encryption. The frontend is built with React, and the backend is a Python Flask server that performs the actual obfuscation.
+The project ships a React/Tauri front-end and a Python CLI that orchestrates
+LLVM-based obfuscation passes. The backend no longer exposes an HTTP server; all
+work is driven through the `backend/app.py` command-line tool, which can run
+jobs immediately or queue them for a persistent background service.
 
 ## Backend Setup
 
@@ -33,12 +36,97 @@ pip install -r requirements.txt
    - Install MinGW or use WSL
    - Install OpenSSL development libraries
 
-4. **Start the backend server:**
+4. **Verify tool availability:**
 ```bash
-python app.py
+python app.py check-tools
 ```
 
-The server will run on `http://localhost:5000`
+## Running Jobs
+
+### Immediate execution
+
+Run obfuscation directly from the CLI and wait for completion:
+
+**Standard syntax:**
+```bash
+python app.py obfuscate -i uploads/sample.c -t string-encryption --report report.json
+```
+
+**Compact syntax:**
+```bash
+python app.py -ob -i uploads/sample.c -s -b -o output.bin
+```
+
+Short flags: `-ob` (obfuscate), `-i` (input), `-s` (string encryption), `-b` (bogus), 
+`-c` (control flow), `-k` (key function virtualization), `-p` (opaque predicates), 
+`-t` (preprocessor trickery), `-a` (all techniques), `-o` (custom output name), 
+`-r` (report file), `-bg` (background/queue job)
+
+### Queued (background) execution
+
+Queue a job and return immediately:
+
+```bash
+python app.py obfuscate -i uploads/sample.c --all --background
+```
+
+Queued jobs are stored on disk under `backend/jobdata` and require the service
+loop to be running to make progress.
+
+## Background Service
+
+Start the worker loop to process queued jobs:
+
+```bash
+python app.py serve
+```
+
+Useful flags:
+
+- `--poll-interval <seconds>`: adjust idle wait time (default 2s)
+- `--once`: process a single job then exit (handy for cron/task scheduler)
+
+### Linux (systemd) example
+
+Create `/etc/systemd/system/llvm-obf.service`:
+
+```
+[Unit]
+Description=LLVM Obfuscation Worker
+WorkingDirectory=/path/to/repo/backend
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 app.py serve
+Restart=on-failure
+User=youruser
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then run:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now llvm-obf.service
+```
+
+### Windows (Task Scheduler) example
+
+1. Open **Task Scheduler** → **Create Task...**
+2. On **Actions**, add: `Program/script: python`,
+   `Arguments: app.py serve`, `Start in: C:\path\to\repo\backend`
+3. On **Triggers**, choose **At startup** or a schedule that suits you
+4. Save the task; ensure Python is on the system PATH or use the absolute path
+
+## Monitoring Jobs
+
+- List or inspect jobs: `python app.py status` or `python app.py status <job_id>`
+- Tail logs: `python app.py logs <job_id>`
+
+Completed artifacts live under `backend/outputs` and metadata/logs under
+`backend/jobdata/<job_id>`.
 
 ## Frontend Setup
 
@@ -52,53 +140,14 @@ npm install
 npm run dev
 ```
 
-The frontend will run on `http://localhost:5173` (or similar Vite port)
-
-## Usage
-
-1. **Start both servers:**
-   - Backend: `python backend/app.py`
-   - Frontend: `npm run dev`
-
-2. **Upload a C file:**
-   - Go to the Obfuscation page
-   - Click "Choose File" and select a `.c` file
-   - Click "Continue to Parameters"
-
-3. **Configure parameters:**
-   - **Important:** Enable "String Encryption" checkbox
-   - Configure other settings as needed
-   - Click "Start Obfuscation"
-
-4. **Monitor progress:**
-   - Watch the progress bar and logs
-   - The system will show real-time processing logs
-
-5. **Download result:**
-   - Once complete, view the report
-   - Click "Download ZIP" to get the obfuscated binary
-
-## Features
-
-- ✅ File upload via frontend
-- ✅ String encryption using AES-256-CBC
-- ✅ Real-time progress tracking
-- ✅ Live processing logs
-- ✅ Automatic report generation
-- ✅ Download obfuscated binaries
-
-## API Endpoints
-
-- `POST /api/upload` - Upload C source file
-- `POST /api/obfuscate` - Start obfuscation job
-- `GET /api/job/<job_id>` - Get job status
-- `GET /api/job/<job_id>/logs` - Get processing logs
-- `GET /api/job/<job_id>/download` - Download result
+The frontend will run on `http://localhost:5173` (or similar Vite port). Integrate
+with the CLI by shelling out to `backend/app.py` or by monitoring the job store
+directories.
 
 ## Notes
 
-- The backend requires String Encryption to be enabled
 - Only `.c` files are currently supported
-- The obfuscated binary includes runtime decryption
-- Encryption keys are generated automatically and shown in the report
+- String Encryption requires OpenSSL libraries at link-time
+- Outputs are produced in the `backend/outputs` directory
+- Reports are optional and can be written via `--report <path>`
 

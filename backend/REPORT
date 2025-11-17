@@ -1,0 +1,76 @@
+{
+  "primary": {
+    "job_id": "8f95d6a0-3600-4509-94f5-b6164b966fb7",
+    "timestamp": "2025-11-16T21:23:01.248155",
+    "original_file": "temp.c",
+    "obfuscated_file": "8f95d6a0-3600-4509-94f5-b6164b966fb7.bin",
+    "file_size": {
+      "before": 80,
+      "after": 7292,
+      "change_percent": 9015.0
+    },
+    "obfuscation": {
+      "technique": "Bogus Control Flow",
+      "features": [
+        "Dead Code Injection",
+        "Unreachable Branches",
+        "Dummy Instructions"
+      ],
+      "method": "LLVM IR Modification"
+    },
+    "status": "completed"
+  },
+  "all_results": {
+    "stringEncryption": {
+      "status": "completed",
+      "result": {
+        "job_id": "8f95d6a0-3600-4509-94f5-b6164b966fb7",
+        "timestamp": "2025-11-16T21:23:01.052292",
+        "original_file": "temp.c",
+        "obfuscated_file": "8f95d6a0-3600-4509-94f5-b6164b966fb7.bin",
+        "file_size": {
+          "before": 80,
+          "after": 8564,
+          "change_percent": 10605.0
+        },
+        "obfuscation": {
+          "strings_encrypted": 1,
+          "encryption_key": "3293e6bf994ab05e942ba5527ba123d35371b6fda14c076a3cea83b1cbde68d2",
+          "method": "AES-256-CBC"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/8f95d6a0-3600-4509-94f5-b6164b966fb7.bin"
+    },
+    "bogus": {
+      "status": "completed",
+      "result": {
+        "job_id": "8f95d6a0-3600-4509-94f5-b6164b966fb7",
+        "timestamp": "2025-11-16T21:23:01.248155",
+        "original_file": "temp.c",
+        "obfuscated_file": "8f95d6a0-3600-4509-94f5-b6164b966fb7.bin",
+        "file_size": {
+          "before": 80,
+          "after": 7292,
+          "change_percent": 9015.0
+        },
+        "obfuscation": {
+          "technique": "Bogus Control Flow",
+          "features": [
+            "Dead Code Injection",
+            "Unreachable Branches",
+            "Dummy Instructions"
+          ],
+          "method": "LLVM IR Modification"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/8f95d6a0-3600-4509-94f5-b6164b966fb7.bin"
+    }
+  },
+  "successful_techniques": [
+    "stringEncryption",
+    "bogus"
+  ],
+  "failed_techniques": []
+}

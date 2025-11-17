@@ -1,0 +1,18 @@
+[22:14:39] Starting obfuscation process...
+[22:14:39] Selected techniques: stringEncryption
+[22:14:39] [22:14:39] Starting string encryption obfuscation...
+[22:14:39] [22:14:39] Generated AES-256 key: b3c069c53172e699...
+[22:14:39] [22:14:39] Running: "/usr/bin/clang" -O0 "/home/ph453/llvm (Copy)/backend/uploads/temp.c" -o "_tmp_5d2e836b/baseline.bin"
+[22:14:40] [22:14:40] Running: "/usr/bin/clang" -emit-llvm -c -O0 "/home/ph453/llvm (Copy)/backend/uploads/temp.c" -o "_tmp_5d2e836b/input.bc"
+[22:14:40] [22:14:40] Running: "/usr/bin/llvm-dis" "_tmp_5d2e836b/input.bc" -o "_tmp_5d2e836b/input.ll"
+[22:14:40] [22:14:40] Scanning for string constants...
+[22:14:40] [22:14:40] Encrypted 1 string(s)
+[22:14:40] [22:14:40] Running: "/usr/bin/llvm-as" "_tmp_5d2e836b/input.ll" -o "_tmp_5d2e836b/obf.bc"
+[22:14:40] [22:14:40] Running: "/usr/bin/llc" -march=x86-64 -relocation-model=pic "_tmp_5d2e836b/obf.bc" -o "_work_f46728ac/code.s"
+[22:14:40] [22:14:40] Running: "/usr/bin/clang" -c -O0 -fPIC "_tmp_5d2e836b/runtime.c" -o "_work_f46728ac/rt.o"
+[22:14:40] [22:14:40] Running: "/usr/bin/clang" -c -fPIC "_work_f46728ac/code.s" -o "_work_f46728ac/code.o"
+[22:14:40] [22:14:40] Running: "/usr/bin/gcc" -fno-pie -no-pie "_work_f46728ac/rt.o" "_work_f46728ac/code.o" -T "_work_f46728ac/blobs.ld" -o "/home/ph453/llvm (Copy)/backend/outputs/c96cacb0-c3a8-4cde-affb-c6f824f47ebc.bin" -lssl -lcrypto
+[22:14:40] [22:14:40] Symbols stripped
+[22:14:40] [22:14:40] ERROR: name 'parameters' is not defined
+[22:14:40] ERROR in stringEncryption: name 'parameters' is not defined
+[22:14:40] All selected techniques failed: stringEncryption: name 'parameters' is not defined

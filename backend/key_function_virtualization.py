@@ -334,18 +334,32 @@ def process_key_function_virtualization(job_id, file_path, parameters, output_fo
             if not out_path.exists():
                 raise Exception("Output binary not created")
             
+            # Compile baseline binary for size comparison
+            baseline_path = output_folder / f"{job_id}_baseline.bin"
+            try:
+                subprocess.run(["gcc", "-O0", str(file_path), "-o", str(baseline_path)], 
+                             capture_output=True, timeout=30, check=True)
+            except:
+                try:
+                    subprocess.run(["clang", "-O0", str(file_path), "-o", str(baseline_path)], 
+                                 capture_output=True, timeout=30, check=True)
+                except:
+                    baseline_path = output_folder / f"{job_id}_baseline_zero.bin"
+                    baseline_path.write_bytes(b'')
+                    log_message(job_id, "Using zero baseline for size comparison", log_callback)
+            
+            # Capture size before UPX for accurate comparison
+            file_size_before = baseline_path.stat().st_size if baseline_path.exists() else 0
+            file_size_after = out_path.stat().st_size
+            
             # Optional UPX compression
             if subprocess.run(["which", "upx"], capture_output=True).returncode == 0:
                 try:
-                    subprocess.run(["upx", "--best", "--lzma", str(out_path)], 
+                    subprocess.run(["upx", "--best", "--ultra-brute", "--lzma", str(out_path)], 
                                  capture_output=True, timeout=60)
                     log_message(job_id, "Compressed with UPX", log_callback)
                 except:
                     log_message(job_id, "UPX compression skipped", log_callback)
-            
-            # Generate report
-            file_size_before = file_path.stat().st_size
-            file_size_after = out_path.stat().st_size
             
             report = generate_report(
                 job_id,

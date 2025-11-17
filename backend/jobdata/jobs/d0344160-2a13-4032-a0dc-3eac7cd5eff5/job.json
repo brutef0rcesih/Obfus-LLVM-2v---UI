@@ -1,0 +1,68 @@
+{
+  "job_id": "d0344160-2a13-4032-a0dc-3eac7cd5eff5",
+  "status": "completed",
+  "progress": 100,
+  "stage": "Completed!",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": false,
+    "bogus": false,
+    "keyFunctionVirtualization": false,
+    "opaque": false,
+    "preprocessorTrickery": false,
+    "addressObfuscation": false
+  },
+  "input_path": "uploads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": "/home/ph453/llvm (Copy)/backend/outputs/d0344160-2a13-4032-a0dc-3eac7cd5eff5.bin",
+  "result": {
+    "primary": {
+      "job_id": "d0344160-2a13-4032-a0dc-3eac7cd5eff5",
+      "timestamp": "2025-11-16T22:06:22.141404",
+      "original_file": "temp.c",
+      "obfuscated_file": "d0344160-2a13-4032-a0dc-3eac7cd5eff5.bin",
+      "file_size": {
+        "before": 15984,
+        "after": 14608,
+        "change_percent": -8.608608608608609
+      },
+      "obfuscation": {
+        "strings_encrypted": 1,
+        "encryption_key": "e281cb0e0ca21d896aadfa232f940d1198ea33fedccacc7865a0292a157b1e6e",
+        "method": "AES-256-CBC"
+      },
+      "status": "completed"
+    },
+    "all_results": {
+      "stringEncryption": {
+        "status": "completed",
+        "result": {
+          "job_id": "d0344160-2a13-4032-a0dc-3eac7cd5eff5",
+          "timestamp": "2025-11-16T22:06:22.141404",
+          "original_file": "temp.c",
+          "obfuscated_file": "d0344160-2a13-4032-a0dc-3eac7cd5eff5.bin",
+          "file_size": {
+            "before": 15984,
+            "after": 14608,
+            "change_percent": -8.608608608608609
+          },
+          "obfuscation": {
+            "strings_encrypted": 1,
+            "encryption_key": "e281cb0e0ca21d896aadfa232f940d1198ea33fedccacc7865a0292a157b1e6e",
+            "method": "AES-256-CBC"
+          },
+          "status": "completed"
+        },
+        "output_file": "/home/ph453/llvm (Copy)/backend/outputs/d0344160-2a13-4032-a0dc-3eac7cd5eff5.bin"
+      }
+    },
+    "successful_techniques": [
+      "stringEncryption"
+    ],
+    "failed_techniques": []
+  },
+  "created_at": "2025-11-17T06:06:21.781074",
+  "updated_at": "2025-11-17T06:06:22.141976",
+  "run_mode": "inline",
+  "requested_output": null
+}

@@ -1,0 +1,23 @@
+{
+  "job_id": "39b11323-ec88-4061-a349-4aa32a837cc3",
+  "status": "processing",
+  "progress": 78,
+  "stage": "Processing address obfuscation...",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": true,
+    "bogus": true,
+    "keyFunctionVirtualization": true,
+    "opaque": true,
+    "preprocessorTrickery": true,
+    "addressObfuscation": true
+  },
+  "input_path": "/home/ph453/Downloads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": null,
+  "result": null,
+  "created_at": "2025-11-17T05:58:50.636595",
+  "updated_at": "2025-11-17T05:58:51.628690",
+  "run_mode": "inline",
+  "requested_output": null
+}

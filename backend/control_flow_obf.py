@@ -287,6 +287,14 @@ def process_control_flow_obfuscation(job_id, file_path, parameters, output_folde
             "{ENC_B64}", base64.b64encode(encrypted).decode()
         )
         
+        # Compile baseline binary for size comparison
+        baseline_path = Path(tempfile.gettempdir()) / f"{job_id}_baseline.bin"
+        try:
+            cmd_baseline = f"gcc -O0 '{file_path}' -o '{baseline_path}'"
+            run_command(cmd_baseline, job_id, "Baseline compilation", log_callback)
+        except:
+            baseline_path = file_path
+        
         # Create temporary loader file
         with tempfile.NamedTemporaryFile(mode='w', suffix='.c', delete=False) as f:
             f.write(loader_c)
@@ -303,18 +311,18 @@ def process_control_flow_obfuscation(job_id, file_path, parameters, output_folde
             if not out_path.exists():
                 raise Exception("Output binary not created")
             
+            # Capture size before UPX for accurate comparison
+            file_size_before = baseline_path.stat().st_size
+            file_size_after = out_path.stat().st_size
+            
             # Optional: UPX compression
             if subprocess.run(["which", "upx"], capture_output=True).returncode == 0:
                 try:
-                    subprocess.run(["upx", "--best", "--lzma", str(out_path)], 
+                    subprocess.run(["upx", "--best", "--ultra-brute", "--lzma", str(out_path)], 
                                  capture_output=True, timeout=60)
                     log_message(job_id, "Compressed with UPX", log_callback)
                 except:
                     log_message(job_id, "UPX compression skipped", log_callback)
-            
-            # Generate report
-            file_size_before = file_path.stat().st_size
-            file_size_after = out_path.stat().st_size
             
             report = generate_report(
                 job_id,

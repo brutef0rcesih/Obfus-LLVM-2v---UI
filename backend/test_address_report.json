@@ -1,0 +1,139 @@
+{
+  "primary": {
+    "job_id": "283ffb2e-48e9-4087-8951-78102f312036",
+    "timestamp": "2025-11-16T21:49:10.601641",
+    "original_file": "temp.c",
+    "obfuscated_file": "283ffb2e-48e9-4087-8951-78102f312036.bin",
+    "file_size": {
+      "before": 15952,
+      "after": 14696,
+      "change_percent": -7.873620862587763
+    },
+    "obfuscation": {
+      "technique": "Key Function Virtualization",
+      "features": [
+        "VM Execution",
+        "Encrypted Bytecode",
+        "Stack-based VM"
+      ],
+      "encryption": "AES-256-CBC + zlib compression"
+    },
+    "status": "completed"
+  },
+  "all_results": {
+    "stringEncryption": {
+      "status": "completed",
+      "result": {
+        "job_id": "283ffb2e-48e9-4087-8951-78102f312036",
+        "timestamp": "2025-11-16T21:49:09.987188",
+        "original_file": "temp.c",
+        "obfuscated_file": "283ffb2e-48e9-4087-8951-78102f312036.bin",
+        "file_size": {
+          "before": 15984,
+          "after": 14608,
+          "change_percent": -8.608608608608609
+        },
+        "obfuscation": {
+          "strings_encrypted": 1,
+          "encryption_key": "89a8f5de7a64057664a9281774d76141f7265879f0e834522e22d709330f40d8",
+          "method": "AES-256-CBC"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/283ffb2e-48e9-4087-8951-78102f312036.bin"
+    },
+    "controlFlow": {
+      "status": "completed",
+      "result": {
+        "job_id": "283ffb2e-48e9-4087-8951-78102f312036",
+        "timestamp": "2025-11-16T21:49:10.158924",
+        "original_file": "temp.c",
+        "obfuscated_file": "283ffb2e-48e9-4087-8951-78102f312036.bin",
+        "file_size": {
+          "before": 15952,
+          "after": 15240,
+          "change_percent": -4.463390170511534
+        },
+        "obfuscation": {
+          "technique": "Control Flow Flattening",
+          "features": [
+            "Anti-Debug",
+            "Anti-VM",
+            "In-Memory Execution"
+          ],
+          "encryption": "AES-256-CBC + zlib compression"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/283ffb2e-48e9-4087-8951-78102f312036.bin"
+    },
+    "bogus": {
+      "status": "completed",
+      "result": {
+        "job_id": "283ffb2e-48e9-4087-8951-78102f312036",
+        "timestamp": "2025-11-16T21:49:10.441460",
+        "original_file": "temp.c",
+        "obfuscated_file": "283ffb2e-48e9-4087-8951-78102f312036.bin",
+        "file_size": {
+          "before": 15984,
+          "after": 15808,
+          "change_percent": -1.1011011011011012
+        },
+        "obfuscation": {
+          "technique": "Bogus Control Flow",
+          "features": [
+            "Dead Code Injection",
+            "Unreachable Branches",
+            "Dummy Instructions"
+          ],
+          "method": "LLVM IR Modification"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/283ffb2e-48e9-4087-8951-78102f312036.bin"
+    },
+    "keyFunctionVirtualization": {
+      "status": "completed",
+      "result": {
+        "job_id": "283ffb2e-48e9-4087-8951-78102f312036",
+        "timestamp": "2025-11-16T21:49:10.601641",
+        "original_file": "temp.c",
+        "obfuscated_file": "283ffb2e-48e9-4087-8951-78102f312036.bin",
+        "file_size": {
+          "before": 15952,
+          "after": 14696,
+          "change_percent": -7.873620862587763
+        },
+        "obfuscation": {
+          "technique": "Key Function Virtualization",
+          "features": [
+            "VM Execution",
+            "Encrypted Bytecode",
+            "Stack-based VM"
+          ],
+          "encryption": "AES-256-CBC + zlib compression"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/283ffb2e-48e9-4087-8951-78102f312036.bin"
+    },
+    "opaque": {
+      "status": "error",
+      "error": "name 'tmpdir' is not defined"
+    },
+    "preprocessorTrickery": {
+      "status": "error",
+      "error": "name 'temp_dir' is not defined"
+    }
+  },
+  "successful_techniques": [
+    "stringEncryption",
+    "controlFlow",
+    "bogus",
+    "keyFunctionVirtualization"
+  ],
+  "failed_techniques": [
+    "opaque",
+    "preprocessorTrickery"
+  ]
+}

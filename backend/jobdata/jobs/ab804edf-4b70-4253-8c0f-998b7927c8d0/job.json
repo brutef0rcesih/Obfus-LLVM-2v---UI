@@ -1,0 +1,70 @@
+{
+  "job_id": "ab804edf-4b70-4253-8c0f-998b7927c8d0",
+  "status": "completed",
+  "progress": 100,
+  "stage": "Completed!",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": false,
+    "bogus": false,
+    "keyFunctionVirtualization": false,
+    "opaque": false,
+    "preprocessorTrickery": false,
+    "addressObfuscation": false
+  },
+  "obf_level": "medium",
+  "upx_level": "high",
+  "input_path": "uploads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": "test_high_upx.bin",
+  "result": {
+    "primary": {
+      "job_id": "ab804edf-4b70-4253-8c0f-998b7927c8d0",
+      "timestamp": "2025-11-16T22:18:19.142387",
+      "original_file": "temp.c",
+      "obfuscated_file": "ab804edf-4b70-4253-8c0f-998b7927c8d0.bin",
+      "file_size": {
+        "before": 15984,
+        "after": 14608,
+        "change_percent": -8.608608608608609
+      },
+      "obfuscation": {
+        "strings_encrypted": 1,
+        "encryption_key": "ad4e722fb8a38530da13e73687047b99b16ae825fab7d15476bc48be4d5f9e0a",
+        "method": "AES-256-CBC"
+      },
+      "status": "completed"
+    },
+    "all_results": {
+      "stringEncryption": {
+        "status": "completed",
+        "result": {
+          "job_id": "ab804edf-4b70-4253-8c0f-998b7927c8d0",
+          "timestamp": "2025-11-16T22:18:19.142387",
+          "original_file": "temp.c",
+          "obfuscated_file": "ab804edf-4b70-4253-8c0f-998b7927c8d0.bin",
+          "file_size": {
+            "before": 15984,
+            "after": 14608,
+            "change_percent": -8.608608608608609
+          },
+          "obfuscation": {
+            "strings_encrypted": 1,
+            "encryption_key": "ad4e722fb8a38530da13e73687047b99b16ae825fab7d15476bc48be4d5f9e0a",
+            "method": "AES-256-CBC"
+          },
+          "status": "completed"
+        },
+        "output_file": "test_high_upx.bin"
+      }
+    },
+    "successful_techniques": [
+      "stringEncryption"
+    ],
+    "failed_techniques": []
+  },
+  "created_at": "2025-11-17T06:18:18.739099",
+  "updated_at": "2025-11-17T06:18:19.142979",
+  "run_mode": "inline",
+  "requested_output": "test_high_upx.bin"
+}

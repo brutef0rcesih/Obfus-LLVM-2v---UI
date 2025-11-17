@@ -1,0 +1,70 @@
+{
+  "job_id": "2a82bfd1-7e74-4539-b6c5-6f78f38b8fba",
+  "status": "completed",
+  "progress": 100,
+  "stage": "Completed!",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": false,
+    "bogus": false,
+    "keyFunctionVirtualization": false,
+    "opaque": false,
+    "preprocessorTrickery": false,
+    "addressObfuscation": false
+  },
+  "obf_level": "medium",
+  "upx_level": "off",
+  "input_path": "uploads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": "test_no_upx.bin",
+  "result": {
+    "primary": {
+      "job_id": "2a82bfd1-7e74-4539-b6c5-6f78f38b8fba",
+      "timestamp": "2025-11-16T22:18:01.966106",
+      "original_file": "temp.c",
+      "obfuscated_file": "2a82bfd1-7e74-4539-b6c5-6f78f38b8fba.bin",
+      "file_size": {
+        "before": 15984,
+        "after": 14608,
+        "change_percent": -8.608608608608609
+      },
+      "obfuscation": {
+        "strings_encrypted": 1,
+        "encryption_key": "875aa3116c334c34334b976c083499fb9fbf782b4fad3c3fb7c495961c5eaa89",
+        "method": "AES-256-CBC"
+      },
+      "status": "completed"
+    },
+    "all_results": {
+      "stringEncryption": {
+        "status": "completed",
+        "result": {
+          "job_id": "2a82bfd1-7e74-4539-b6c5-6f78f38b8fba",
+          "timestamp": "2025-11-16T22:18:01.966106",
+          "original_file": "temp.c",
+          "obfuscated_file": "2a82bfd1-7e74-4539-b6c5-6f78f38b8fba.bin",
+          "file_size": {
+            "before": 15984,
+            "after": 14608,
+            "change_percent": -8.608608608608609
+          },
+          "obfuscation": {
+            "strings_encrypted": 1,
+            "encryption_key": "875aa3116c334c34334b976c083499fb9fbf782b4fad3c3fb7c495961c5eaa89",
+            "method": "AES-256-CBC"
+          },
+          "status": "completed"
+        },
+        "output_file": "test_no_upx.bin"
+      }
+    },
+    "successful_techniques": [
+      "stringEncryption"
+    ],
+    "failed_techniques": []
+  },
+  "created_at": "2025-11-17T06:18:01.655083",
+  "updated_at": "2025-11-17T06:18:01.966433",
+  "run_mode": "inline",
+  "requested_output": "test_no_upx.bin"
+}

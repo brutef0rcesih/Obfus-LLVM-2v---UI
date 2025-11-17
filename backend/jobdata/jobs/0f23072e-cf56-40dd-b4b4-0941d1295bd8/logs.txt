@@ -1,0 +1,18 @@
+[21:34:05] Starting obfuscation process...
+[21:34:05] Selected techniques: stringEncryption
+[21:34:05] [21:34:05] Starting string encryption obfuscation...
+[21:34:05] [21:34:05] Generated AES-256 key: b5d066685b454184...
+[21:34:05] [21:34:05] Running: "/usr/bin/clang" -O0 "/home/ph453/llvm (Copy)/backend/uploads/temp.c" -o "_tmp_a1890f8b/baseline.bin"
+[21:34:05] [21:34:05] Running: "/usr/bin/clang" -emit-llvm -c -O0 "/home/ph453/llvm (Copy)/backend/uploads/temp.c" -o "_tmp_a1890f8b/input.bc"
+[21:34:05] [21:34:05] Running: "/usr/bin/llvm-dis" "_tmp_a1890f8b/input.bc" -o "_tmp_a1890f8b/input.ll"
+[21:34:05] [21:34:05] Scanning for string constants...
+[21:34:05] [21:34:05] Encrypted 1 string(s)
+[21:34:05] [21:34:05] Running: "/usr/bin/llvm-as" "_tmp_a1890f8b/input.ll" -o "_tmp_a1890f8b/obf.bc"
+[21:34:05] [21:34:05] Running: "/usr/bin/llc" -march=x86-64 -relocation-model=pic "_tmp_a1890f8b/obf.bc" -o "_work_a27d8ae4/code.s"
+[21:34:05] [21:34:05] Running: "/usr/bin/clang" -c -O0 -fPIC "_tmp_a1890f8b/runtime.c" -o "_work_a27d8ae4/rt.o"
+[21:34:05] [21:34:05] Running: "/usr/bin/clang" -c -fPIC "_work_a27d8ae4/code.s" -o "_work_a27d8ae4/code.o"
+[21:34:05] [21:34:05] Running: "/usr/bin/gcc" -fno-pie -no-pie "_work_a27d8ae4/rt.o" "_work_a27d8ae4/code.o" -T "_work_a27d8ae4/blobs.ld" -o "/home/ph453/llvm (Copy)/backend/outputs/0f23072e-cf56-40dd-b4b4-0941d1295bd8.bin" -lssl -lcrypto
+[21:34:06] [21:34:06] Symbols stripped
+[21:34:06] [21:34:06] Compressed with UPX
+[21:34:06] [21:34:06] String encryption obfuscation completed successfully!
+[21:34:06] Obfuscation completed! Successful: 1, Failed: 0

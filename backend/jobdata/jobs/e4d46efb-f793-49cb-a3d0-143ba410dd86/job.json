@@ -1,0 +1,97 @@
+{
+  "job_id": "e4d46efb-f793-49cb-a3d0-143ba410dd86",
+  "status": "completed",
+  "progress": 100,
+  "stage": "Completed!",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": false,
+    "bogus": true,
+    "keyFunctionVirtualization": false,
+    "opaque": false,
+    "preprocessorTrickery": false
+  },
+  "input_path": "uploads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": "/home/ph453/llvm (Copy)/backend/outputs/e4d46efb-f793-49cb-a3d0-143ba410dd86.bin",
+  "result": {
+    "primary": {
+      "job_id": "e4d46efb-f793-49cb-a3d0-143ba410dd86",
+      "timestamp": "2025-11-16T21:20:10.886537",
+      "original_file": "temp.c",
+      "obfuscated_file": "e4d46efb-f793-49cb-a3d0-143ba410dd86.bin",
+      "file_size": {
+        "before": 80,
+        "after": 7284,
+        "change_percent": 9005.0
+      },
+      "obfuscation": {
+        "technique": "Bogus Control Flow",
+        "features": [
+          "Dead Code Injection",
+          "Unreachable Branches",
+          "Dummy Instructions"
+        ],
+        "method": "LLVM IR Modification"
+      },
+      "status": "completed"
+    },
+    "all_results": {
+      "stringEncryption": {
+        "status": "completed",
+        "result": {
+          "job_id": "e4d46efb-f793-49cb-a3d0-143ba410dd86",
+          "timestamp": "2025-11-16T21:20:10.693828",
+          "original_file": "temp.c",
+          "obfuscated_file": "e4d46efb-f793-49cb-a3d0-143ba410dd86.bin",
+          "file_size": {
+            "before": 80,
+            "after": 8564,
+            "change_percent": 10605.0
+          },
+          "obfuscation": {
+            "strings_encrypted": 1,
+            "encryption_key": "90cd4070b9bc418d3d7d26ea308f26e8556476ef880f14741c7429233d2b7ced",
+            "method": "AES-256-CBC"
+          },
+          "status": "completed"
+        },
+        "output_file": "/home/ph453/llvm (Copy)/backend/outputs/e4d46efb-f793-49cb-a3d0-143ba410dd86.bin"
+      },
+      "bogus": {
+        "status": "completed",
+        "result": {
+          "job_id": "e4d46efb-f793-49cb-a3d0-143ba410dd86",
+          "timestamp": "2025-11-16T21:20:10.886537",
+          "original_file": "temp.c",
+          "obfuscated_file": "e4d46efb-f793-49cb-a3d0-143ba410dd86.bin",
+          "file_size": {
+            "before": 80,
+            "after": 7284,
+            "change_percent": 9005.0
+          },
+          "obfuscation": {
+            "technique": "Bogus Control Flow",
+            "features": [
+              "Dead Code Injection",
+              "Unreachable Branches",
+              "Dummy Instructions"
+            ],
+            "method": "LLVM IR Modification"
+          },
+          "status": "completed"
+        },
+        "output_file": "/home/ph453/llvm (Copy)/backend/outputs/e4d46efb-f793-49cb-a3d0-143ba410dd86.bin"
+      }
+    },
+    "successful_techniques": [
+      "stringEncryption",
+      "bogus"
+    ],
+    "failed_techniques": []
+  },
+  "created_at": "2025-11-17T05:20:10.436419",
+  "updated_at": "2025-11-17T05:20:10.887347",
+  "run_mode": "inline",
+  "requested_output": null
+}

@@ -193,6 +193,22 @@ def process_bogus_obfuscation(job_id, file_path, parameters, output_folder, log_
             mod_bc = tmpdir / f"{base}_mod.bc"
             obj_file = tmpdir / f"{base}.o"
             
+            # Compile baseline binary for size comparison
+            baseline_path = tmpdir / f"{base}_baseline.bin"
+            try:
+                cmd = f"clang -O0 '{file_path}' -o '{baseline_path}'"
+                run_command(cmd, job_id, "Baseline compilation", log_callback)
+            except Exception as e:
+                log_message(job_id, f"Baseline compilation failed: {e}, using minimal build", log_callback)
+                try:
+                    cmd = f"gcc -O0 '{file_path}' -o '{baseline_path}'"
+                    subprocess.run(cmd, shell=True, capture_output=True, timeout=30, check=True)
+                except:
+                    baseline_path.write_bytes(b'')
+                    log_message(job_id, "Using zero baseline for size comparison", log_callback)
+            except:
+                baseline_path = file_path
+            
             log_message(job_id, "Compiling to LLVM bitcode...", log_callback)
             compile_to_bc(file_path, bc_file, job_id, log_callback)
             
@@ -221,19 +237,19 @@ def process_bogus_obfuscation(job_id, file_path, parameters, output_folder, log_
             if not out_path.exists():
                 raise Exception("Output binary not created")
             
+            # Capture size before optimizations for accurate comparison
+            file_size_before = baseline_path.stat().st_size
+            file_size_after = out_path.stat().st_size
+            
             # Optional optimizations
             log_message(job_id, "Applying final optimizations...", log_callback)
             os.system(f"strip --strip-unneeded '{out_path}' 2>/dev/null")
             
-            upx_result = os.system(f"upx --best --lzma '{out_path}' 2>/dev/null")
+            upx_result = os.system(f"upx --best --ultra-brute --lzma '{out_path}' 2>/dev/null")
             if upx_result == 0:
                 log_message(job_id, "Compressed with UPX", log_callback)
             else:
                 log_message(job_id, "UPX compression skipped", log_callback)
-            
-            # Generate report
-            file_size_before = file_path.stat().st_size
-            file_size_after = out_path.stat().st_size
             
             report = generate_report(
                 job_id,

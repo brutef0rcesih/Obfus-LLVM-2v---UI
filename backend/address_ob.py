@@ -180,5 +180,152 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+def check_requirements():
+    """Check if required tools are available"""
+    missing = []
+    for tool in ["clang", "llvm-link"]:
+        if not shutil.which(tool):
+            missing.append(tool)
+    
+    if missing:
+        return {"available": False, "missing": missing}
+    return {"available": True, "missing": []}
+
+def log_message(job_id, message, log_callback=None):
+    """Log a message for a job"""
+    if log_callback:
+        log_callback(job_id, message)
+    else:
+        print(f"Job {job_id}: {message}")
+
+def generate_report(job_id, original_file, obfuscated_file, file_size_before, file_size_after):
+    """Generate obfuscation report"""
+    from datetime import datetime
+    report = {
+        "job_id": job_id,
+        "timestamp": datetime.utcnow().isoformat(),
+        "original_file": original_file,
+        "obfuscated_file": obfuscated_file,
+        "file_size": {
+            "before": file_size_before,
+            "after": file_size_after,
+            "change_percent": ((file_size_after - file_size_before) / file_size_before * 100) if file_size_before > 0 else 0
+        },
+        "obfuscation": {
+            "technique": "Address Obfuscation",
+            "features": ["Opaque Predicates", "Random Variable Names", "Dead Code Branches"]
+        },
+        "status": "completed"
+    }
+    return report
+
+def process_address_obfuscation(job_id, file_path, parameters, output_folder, log_callback=None):
+    """Process address obfuscation (opaque predicates)"""
+    from pathlib import Path
+    
+    try:
+        log_message(job_id, "Starting address obfuscation...", log_callback)
+        
+        file_path = Path(file_path)
+        output_folder = Path(output_folder)
+        output_folder.mkdir(exist_ok=True)
+        
+        # Check if file exists
+        if not file_path.exists():
+            raise Exception(f"Input file not found: {file_path}")
+        
+        # Create temp directory
+        tmp = tempfile.mkdtemp(prefix="addr_obf_")
+        tmp_path = Path(tmp)
+        
+        try:
+            # Compile baseline binary for size comparison
+            baseline_path = tmp_path / "baseline.bin"
+            try:
+                subprocess.run(["gcc", "-O0", str(file_path), "-o", str(baseline_path)], 
+                             capture_output=True, timeout=30, check=True)
+            except:
+                try:
+                    subprocess.run(["clang", "-O0", str(file_path), "-o", str(baseline_path)], 
+                                 capture_output=True, timeout=30, check=True)
+                except:
+                    baseline_path.write_bytes(b'')
+                    log_message(job_id, "Using zero baseline for size comparison", log_callback)
+            
+            # 1. Obfuscate source
+            log_message(job_id, "Reading source file...", log_callback)
+            with open(file_path, "r") as f:
+                src_code = f.read()
+            
+            log_message(job_id, "Applying opaque predicates...", log_callback)
+            obf_code = obfuscate_source(src_code)
+            
+            obf_src = tmp_path / ("obf_temp.c" if str(file_path).lower().endswith(".c") else "obf_temp.cpp")
+            with open(obf_src, "w") as f:
+                f.write(obf_code)
+            
+            # 2. Compile original to .bc
+            log_message(job_id, "Compiling original to bitcode...", log_callback)
+            bc = tmp_path / "orig.bc"
+            compile_to_bc(str(file_path), str(bc))
+            
+            # 3. Compile obfuscated to .obf.bc
+            log_message(job_id, "Compiling obfuscated to bitcode...", log_callback)
+            obf_bc = tmp_path / "obf.bc"
+            compile_to_bc(str(obf_src), str(obf_bc))
+            
+            # 4. Link bitcode
+            log_message(job_id, "Linking bitcode...", log_callback)
+            linked_bc = tmp_path / "linked.bc"
+            link_bc([str(obf_bc)], str(linked_bc))
+            
+            # 5. Generate binary
+            log_message(job_id, "Generating final binary...", log_callback)
+            out_path = output_folder / f"{job_id}.bin"
+            bc_to_binary(str(linked_bc), str(out_path))
+            
+            if not out_path.exists():
+                raise Exception("Output binary not created")
+            
+            # Capture size before UPX for accurate comparison
+            file_size_before = baseline_path.stat().st_size if baseline_path.exists() else 0
+            file_size_after = out_path.stat().st_size
+            
+            # 6. Optional UPX compression
+            if subprocess.run(["which", "upx"], capture_output=True).returncode == 0:
+                try:
+                    subprocess.run(["upx", "--best", "--ultra-brute", "--lzma", str(out_path)], 
+                                 capture_output=True, timeout=60)
+                    log_message(job_id, "Compressed with UPX", log_callback)
+                except:
+                    log_message(job_id, "UPX compression skipped", log_callback)
+            
+            # Generate report
+            report = generate_report(
+                job_id,
+                file_path.name,
+                out_path.name,
+                file_size_before,
+                file_size_after
+            )
+            
+            log_message(job_id, "Address obfuscation completed successfully!", log_callback)
+            
+            return {
+                "status": "completed",
+                "result": report,
+                "output_file": str(out_path)
+            }
+            
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+            
+    except Exception as e:
+        log_message(job_id, f"Address obfuscation failed: {e}", log_callback)
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
 if __name__ == "__main__":
     main()

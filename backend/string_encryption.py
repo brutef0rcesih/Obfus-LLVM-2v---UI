@@ -273,7 +273,7 @@ def make_runtime_c(blobs, key):
     c += '\n'.join(blob_defs) + '\n'
     return c
 
-def build_final(obf_bc: Path, runtime_c: Path, out_path: Path, job_id, log_callback=None):
+def build_final(obf_bc: Path, runtime_c: Path, out_path: Path, job_id, log_callback=None, upx_args=None, upx_level="high"):
     """Build final obfuscated binary"""
     work = Path(f"_work_{uuid.uuid4().hex[:8]}")
     work.mkdir(exist_ok=True)
@@ -332,15 +332,21 @@ INSERT AFTER .data
             except:
                 log_message(job_id, "Strip skipped", log_callback)
 
-        # Optional: compress with UPX
-        upx_tool = shutil.which('upx')
-        if upx_tool:
-            try:
-                subprocess.run([upx_tool, '--best', '--lzma', str(out_path)], 
-                             capture_output=True, timeout=60)
-                log_message(job_id, "Compressed with UPX", log_callback)
-            except:
-                log_message(job_id, "UPX skipped (not installed or failed)", log_callback)
+        # Capture uncompressed size before UPX
+        uncompressed_size = out_path.stat().st_size if out_path.exists() else 0
+        
+        # Optional: compress with UPX (using level from parameters)
+        if upx_args:
+            upx_tool = shutil.which('upx')
+            if upx_tool:
+                try:
+                    subprocess.run([upx_tool] + upx_args + [str(out_path)], 
+                                 capture_output=True, timeout=60)
+                    log_message(job_id, f"Compressed with UPX ({upx_level})", log_callback)
+                except:
+                    log_message(job_id, "UPX skipped (not installed or failed)", log_callback)
+        
+        return uncompressed_size
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -407,6 +413,22 @@ def process_string_encryption(job_id, file_path, parameters, output_folder, log_
             key_hex = key.hex()
             log_message(job_id, f"Generated AES-256 key: {key_hex[:16]}...", log_callback)
             
+            # Compile baseline binary for size comparison
+            baseline_path = tmp / "baseline.bin"
+            try:
+                cmd = f'"{CLANG}" -O0 "{file_path}" -o "{baseline_path}"'
+                run_command(cmd, job_id, "Baseline compilation", log_callback)
+            except Exception as e:
+                # If baseline fails, compile a minimal version
+                log_message(job_id, f"Baseline compilation failed: {e}, using minimal build", log_callback)
+                try:
+                    cmd = f'"{GCC}" -O0 "{file_path}" -o "{baseline_path}"'
+                    subprocess.run(cmd, shell=True, capture_output=True, timeout=30, check=True)
+                except:
+                    # Last resort: use a zero baseline to show absolute size
+                    baseline_path.write_bytes(b'')
+                    log_message(job_id, "Using zero baseline for size comparison", log_callback)
+            
             # Process the file
             c_to_bc(file_path, bc, job_id, log_callback)
             bc_to_ll(bc, ll, job_id, log_callback)
@@ -418,11 +440,13 @@ def process_string_encryption(job_id, file_path, parameters, output_folder, log_
             
             # Build final binary
             out_path = output_folder / f"{job_id}.bin"
-            build_final(obf_bc, rt_c, out_path, job_id, log_callback)
+            upx_args = parameters.get('_upx_args')
+            upx_level = parameters.get('_upx_level', 'high')
+            uncompressed_size = build_final(obf_bc, rt_c, out_path, job_id, log_callback, upx_args, upx_level)
             
-            # Generate report
-            file_size_before = file_path.stat().st_size
-            file_size_after = out_path.stat().st_size if out_path.exists() else 0
+            # Generate report (use uncompressed size for accurate comparison)
+            file_size_before = baseline_path.stat().st_size
+            file_size_after = uncompressed_size if uncompressed_size else 0
             
             report = generate_report(
                 job_id, 

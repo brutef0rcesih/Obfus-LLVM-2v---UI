@@ -1,0 +1,46 @@
+{
+  "primary": {
+    "job_id": "2b8df74a-2f90-48bd-bb41-a021ab092798",
+    "timestamp": "2025-11-16T21:34:50.760187",
+    "original_file": "temp.c",
+    "obfuscated_file": "2b8df74a-2f90-48bd-bb41-a021ab092798.bin",
+    "file_size": {
+      "before": 15984,
+      "after": 8564,
+      "change_percent": -46.42142142142142
+    },
+    "obfuscation": {
+      "strings_encrypted": 1,
+      "encryption_key": "535cb51d7262a683040fe35292a796656cb5b1abcf974038df133fb0e92b8c84",
+      "method": "AES-256-CBC"
+    },
+    "status": "completed"
+  },
+  "all_results": {
+    "stringEncryption": {
+      "status": "completed",
+      "result": {
+        "job_id": "2b8df74a-2f90-48bd-bb41-a021ab092798",
+        "timestamp": "2025-11-16T21:34:50.760187",
+        "original_file": "temp.c",
+        "obfuscated_file": "2b8df74a-2f90-48bd-bb41-a021ab092798.bin",
+        "file_size": {
+          "before": 15984,
+          "after": 8564,
+          "change_percent": -46.42142142142142
+        },
+        "obfuscation": {
+          "strings_encrypted": 1,
+          "encryption_key": "535cb51d7262a683040fe35292a796656cb5b1abcf974038df133fb0e92b8c84",
+          "method": "AES-256-CBC"
+        },
+        "status": "completed"
+      },
+      "output_file": "/home/ph453/llvm (Copy)/backend/outputs/2b8df74a-2f90-48bd-bb41-a021ab092798.bin"
+    }
+  },
+  "successful_techniques": [
+    "stringEncryption"
+  ],
+  "failed_techniques": []
+}

@@ -1,0 +1,26 @@
+{
+  "job_id": "88c9bca2-e5cf-45f9-90da-ecd07ea51a67",
+  "status": "error",
+  "progress": 100,
+  "stage": "Failed",
+  "parameters": {
+    "stringEncryption": true,
+    "controlFlow": false,
+    "bogus": false,
+    "keyFunctionVirtualization": false,
+    "opaque": false,
+    "preprocessorTrickery": false,
+    "addressObfuscation": false
+  },
+  "obf_level": "medium",
+  "upx_level": "off",
+  "input_path": "uploads/temp.c",
+  "upload_path": "/home/ph453/llvm (Copy)/backend/uploads/temp.c",
+  "output_file": null,
+  "result": null,
+  "created_at": "2025-11-17T06:14:26.027281",
+  "updated_at": "2025-11-17T06:14:26.333632",
+  "run_mode": "inline",
+  "requested_output": "test_upx_off.bin",
+  "error": "stringEncryption: name 'parameters' is not defined"
+}
