@@ -15,6 +15,7 @@ import tempfile
 import zlib
 import base64
 import re
+import shutil
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict
@@ -304,7 +305,7 @@ def process_control_flow_obfuscation(job_id, file_path, parameters, output_folde
                 raise Exception("Output binary not created")
             
             # Optional: UPX compression
-            if subprocess.run(["which", "upx"], capture_output=True).returncode == 0:
+            if tool_available("upx"):
                 try:
                     subprocess.run(["upx", "--best", "--lzma", str(out_path)], 
                                  capture_output=True, timeout=60)
@@ -344,12 +345,29 @@ def process_control_flow_obfuscation(job_id, file_path, parameters, output_folde
             "error": str(e)
         }
 
+def tool_available(tool_name: str) -> bool:
+    """Cross-platform check for tool availability."""
+    if shutil.which(tool_name):
+        return True
+    if os.name == "nt":
+        try:
+            return subprocess.run(
+                ["where", tool_name],
+                capture_output=True,
+                text=True,
+                creationflags=subprocess.CREATE_NO_WINDOW
+            ).returncode == 0
+        except FileNotFoundError:
+            return False
+    return False
+
+
 def check_requirements():
     """Check if required tools are available"""
     requirements = {
-        'tcc': subprocess.run(["which", "tcc"], capture_output=True).returncode == 0,
-        'gcc': subprocess.run(["which", "gcc"], capture_output=True).returncode == 0,
-        'upx': subprocess.run(["which", "upx"], capture_output=True).returncode == 0,
+        'tcc': tool_available("tcc"),
+        'gcc': tool_available("gcc"),
+        'upx': tool_available("upx"),
     }
     requirements['all_available'] = requirements['tcc'] and requirements['gcc']
     return requirements
