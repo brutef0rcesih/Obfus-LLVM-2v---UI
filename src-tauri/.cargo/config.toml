@@ -1,0 +1,6 @@
+[build]
+target-dir = "C:/Users/Public/tauri-build"
+
+[env]
+RUST_BACKTRACE = "1"
+CARGO_TARGET_DIR = "C:/Users/Public/tauri-build"
