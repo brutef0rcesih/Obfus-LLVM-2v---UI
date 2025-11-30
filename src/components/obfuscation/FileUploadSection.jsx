@@ -14,6 +14,7 @@ const FileUploadSection = () => {
   const [previewFileName, setPreviewFileName] = useState("")
   const [showPreview, setShowPreview] = useState(false)
 
+
   const files = internalFiles
 
   const sortedFiles = [...files].sort((a, b) =>
@@ -64,8 +65,11 @@ const FileUploadSection = () => {
   }
 
   const handleContinueToPolicy = () => {
-    if (files.length > 0) navigate('/obfuscation/configuration')
+    if (files.length > 0) {
+      navigate('/obfuscation/configuration')
+    }
   }
+
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes'
@@ -77,33 +81,13 @@ const FileUploadSection = () => {
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
-      <div className="border-b border-gray-200 px-6 py-3">
-        <nav className="flex" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-sm">
-            <li>
-              <div className="flex items-center">
-                <Home className="h-4 w-4 text-gray-400" />
-                <span className="ml-1 text-gray-500 hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>
-                  Home
-                </span>
-              </div>
-            </li>
-            <li>
-              <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
-            </li>
-            <li>
-              <span className="text-gray-900 font-medium">Upload File</span>
-            </li>
-          </ol>
-        </nav>
-      </div>
+
 
       <div className="flex flex-1 overflow-hidden">
         <UploadSidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
 
         <div className="flex-1 overflow-auto">
           <div className="max-w-6xl mx-auto p-6">
-
             <div className="mb-6">
               <label className="text-lg font-medium text-gray-700 flex items-center space-x-2 mb-3">
                 <FileCode className="h-4 w-4" />
@@ -162,7 +146,7 @@ const FileUploadSection = () => {
                       </button>
                     </div>
                   )}
-                  <div className="max-h-72 overflow-y-auto flex flex-wrap gap-2 mt-2">
+                  <div className="max-h-52 overflow-y-auto flex flex-wrap gap-2 mt-2">
                     {filteredFiles.map((file, index) => (
                       <div
                         key={index}
@@ -170,7 +154,7 @@ const FileUploadSection = () => {
                       >
                         <p
                           onClick={() => handleFilePreview(file)}
-                          className="text-xs font-medium text-gray-900 truncate cursor-pointer hover:text-blue-600 hover:underline"
+                          className="text-xs font-medium text-gray-900 truncate cursor-pointer hover:text-gray-700 hover:font-semibold hover:underline"
                         >
                           {file.name}
                         </p>

@@ -24,7 +24,7 @@ function Sidebar() {
               }`
             }
           >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/obfuscation'
+            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/upload'
               ? 'bg-gray-200 text-gray-800'
               : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
               }`}>
@@ -32,25 +32,10 @@ function Sidebar() {
             </div>
             <span className="font-medium">New Obfuscation</span>
           </NavLink>
-
-          <NavLink
-            to="/auto-obfuscation"
-            className={({ isActive }) =>
-              `${navBase} ${isActive
-                ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`
-            }
-          >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/auto-obfuscation'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
-              <Zap className="w-4 h-4" />
-            </div>
-            <span className="font-medium">Auto Obfuscation</span>
-          </NavLink>
-
+          {/* Separator */}
+          <div className="my-4">
+            <div className="border-t border-gray-200"></div>
+         </div>
           <NavLink
             to="/configuration"
             className={({ isActive }) =>
@@ -68,70 +53,7 @@ function Sidebar() {
             </div>
             <span className="font-medium">Configuration</span>
           </NavLink>
-
-          <NavLink
-            to="/history"
-            className={({ isActive }) =>
-              `${navBase} ${isActive
-                ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`
-            }
-          >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/history'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
-              <Clock className="w-4 h-4" />
-            </div>
-            <span className="font-medium">History</span>
-          </NavLink>
-
-          <NavLink
-            to="/client-configuration"
-            className={({ isActive }) =>
-              `${navBase} ${isActive
-                ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`
-            }
-          >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/client-configuration'
-                ? 'bg-gray-200 text-gray-800'
-                : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
-              <Users className="w-4 h-4" />
-            </div>
-            <span className="font-medium">Client Configuration</span>
-          </NavLink>
-
-
-          {/* Separator */}
-          <div className="my-4">
-            <div className="border-t border-gray-200"></div>
-          </div>
-
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              `${navBase} ${isActive
-                ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`
-            }
-          >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/settings'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
-              <Settings className="w-4 h-4" />
-            </div>
-            <span className="font-medium">Settings</span>
-          </NavLink>
-        </nav>
-
-
-
+        </nav>  
       </div>
     </aside>
   );
