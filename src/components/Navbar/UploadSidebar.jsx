@@ -1,4 +1,4 @@
-import { Settings, Upload, ChevronRight, ChevronLeft, FileText } from 'lucide-react'
+import { Settings, Upload, ChevronRight, ChevronLeft, FileText, FolderOutput } from 'lucide-react'
 import { useState } from 'react'
 
 function UploadSidebar({ isOpen, onToggle, activeItem = 'upload' }) {
@@ -11,22 +11,27 @@ function UploadSidebar({ isOpen, onToggle, activeItem = 'upload' }) {
     {
       id: 'upload',
       label: 'Select Files',
-      icon: Upload
+      icon: Upload,
+      path: '/obfuscation/upload'
     },
     {
       id: 'configuration',
       label: 'Configuration',
-      icon: Settings
+      icon: Settings,
+      path: '/obfuscation/configuration'
     },
+
     {
       id: 'report',
       label: 'View Report',
-      icon: FileText
+      icon: FileText,
+      path: '/obfuscation/result'
     }
   ]
 
-  const handleItemClick = (itemId) => {
-    setInternalActiveItem(itemId)
+  const handleItemClick = (item) => {
+    // Only update the active item visually; do not redirect on click
+    setInternalActiveItem(item.id)
   }
 
   return (
@@ -43,7 +48,7 @@ function UploadSidebar({ isOpen, onToggle, activeItem = 'upload' }) {
               return (
                 <div
                   key={item.id}
-                  onClick={() => handleItemClick(item.id)}
+                  onClick={() => handleItemClick(item)}
                   className="flex flex-col items-center cursor-pointer transition-all duration-200 group"
                 >
                   <div className={`${isOpen ? 'p-5' : 'p-3'} rounded-lg mb-3 ${isActive ? 'bg-gray-300' : 'bg-gray-100 hover:bg-gray-200'

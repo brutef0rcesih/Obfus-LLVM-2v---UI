@@ -1,0 +1,164 @@
+{
+    "report_metadata": {
+        "obfuscation_time": "2025-12-01T10:14:32Z",
+        "report_generation_time": "2025-12-01T10:15:04Z",
+        "type_of_obfuscation": "Multi",
+        "number_of_files": 5,
+        "status_of_obfuscation": "Completed",
+        "status_reason": "All files obfuscated successfully with hardened profile.",
+        "bogus_code_percent": "18.7%",
+        "target_platform": "Linux",
+        "configuration_name": "Linux_Hardened_Profile",
+        "number_of_cycles": 3
+    },
+    "paths": {
+        "input_root_path": "/home/sih/obfus/input",
+        "output_root_path": "/home/sih/obfus/output"
+    },
+    "configurations": [
+        {
+            "method_name": "Preprocessor Tricks",
+            "enabled": "Yes",
+            "parameters": "macro_shuffle=true; dead_macros=enabled"
+        },
+ {
+            "method_name": "String Encryption",
+            "enabled": "Yes",
+            "parameters": "algorithm=AES-128; key_rotation=per-build"
+        },
+        {
+            "method_name": "Function Virtualization",
+            "enabled": "No",
+            "parameters": "vm_backend=llvm_jit"
+        },
+        {
+            "method_name": "Bogus Control Flow",
+            "enabled": "Yes",
+            "parameters": "density=medium; opaque_ratio=0.4"
+        },
+        {
+            "method_name": "Opaque Predicates",
+            "enabled": "Yes",
+            "parameters": "strength=strong; arithmetic_mix=true"
+        },
+        {
+            "method_name": "Control Flow Flattening",
+            "enabled": "Yes",
+            "parameters": "targets=critical_paths_only"
+        },
+        {
+            "method_name": "Address Obfuscation",
+            "enabled": "No",
+            "parameters": "base_randomization=disabled_for_debug"
+        },
+        {
+            "method_name": "Symbol Renaming",
+            "enabled": "Yes",
+            "parameters": "mangle_style=hash; keep_public_api=false"
+        },
+        {
+            "method_name": "Anti-Debug Protection",
+            "enabled": "Yes",
+            "parameters": "ptrace_check=true; timing_checks=true"
+        }
+    ],
+    "files": [
+        {
+            "s_no": 1,
+            "input_file_name": "main.c",
+            "output_file_name": "main_obf.o",
+            "input_file_type": "c",
+            "input_file_size_bytes": 12048,
+            "obfuscated_file_size_bytes": 14592,
+            "time_limit_seconds": 60,
+            "size_limit_bytes": 5242880,
+            "size_change_percent": 21.12,
+            "size_change_bytes": 2544,
+            "memory_usage_mb": 96.3,
+            "num_string_obfuscations": 38,
+            "num_fake_look_inserted": 17
+        },
+        {
+            "s_no": 2,
+            "input_file_name": "crypto.c",
+            "output_file_name": "crypto_obf.o",
+            "input_file_type": "c",
+            "input_file_size_bytes": 18136,
+            "obfuscated_file_size_bytes": 21096,
+            "time_limit_seconds": 60,
+            "size_limit_bytes": 5242880,
+            "size_change_percent": 16.31,
+            "size_change_bytes": 2960,
+            "memory_usage_mb": 104.8,
+            "num_string_obfuscations": 72,
+            "num_fake_look_inserted": 29
+        },
+        {
+            "s_no": 3,
+            "input_file_name": "engine.cpp",
+            "output_file_name": "engine_obf.o",
+            "input_file_type": "cpp",
+            "input_file_size_bytes": 9872,
+            "obfuscated_file_size_bytes": 11240,
+            "time_limit_seconds": 60,
+            "size_limit_bytes": 5242880,
+            "size_change_percent": 13.85,
+            "size_change_bytes": 1368,
+            "memory_usage_mb": 111.2,
+            "num_string_obfuscations": 41,
+            "num_fake_look_inserted": 22
+        },
+        {
+            "s_no": 4,
+            "input_file_name": "util.h",
+            "output_file_name": "util_obf.h",
+            "input_file_type": "header",
+            "input_file_size_bytes": 4096,
+            "obfuscated_file_size_bytes": 5120,
+            "time_limit_seconds": 30,
+            "size_limit_bytes": 1048576,
+            "size_change_percent": 25.00,
+            "size_change_bytes": 1024,
+            "memory_usage_mb": 82.1,
+            "num_string_obfuscations": 12,
+            "num_fake_look_inserted": 5
+        },
+        {
+            "s_no": 5,
+            "input_file_name": "core_linux.o",
+            "output_file_name": "core_linux_obf.o",
+            "input_file_type": "object",
+            "input_file_size_bytes": 22480,
+            "obfuscated_file_size_bytes": 25960,
+            "time_limit_seconds": 60,
+            "size_limit_bytes": 5242880,
+            "size_change_percent": 15.47,
+            "size_change_bytes": 3480,
+            "memory_usage_mb": 129.7,
+            "num_string_obfuscations": 64,
+            "num_fake_look_inserted": 31
+        }
+    ],
+    "file_type_distribution": [
+        {
+            "type": "c",
+            "count": 2
+        },
+        {
+            "type": "cpp",
+            "count": 1
+        },
+        {
+            "type": "object",
+            "count": 1
+        },
+        {
+            "type": "header",
+            "count": 1
+        },
+        {
+            "type": "other",
+            "count": 2
+        }
+    ]
+}

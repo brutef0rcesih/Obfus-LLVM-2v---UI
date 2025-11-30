@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Shield, Clock, Settings, Sliders, Plus, Zap, Users } from "lucide-react";
+import { FolderOutput, Sliders, Plus } from "lucide-react";
 
 function Sidebar() {
   const navBase =
@@ -11,12 +11,13 @@ function Sidebar() {
         {/* App Title */}
         <div className="mb-4">
           <h2 className="text-lg font-semibold text-gray-900 px-3">LLVM Obfuscator</h2>
-          <p className="text-sm text-gray-500 px-3 ">Code Protection Suite</p>
+          <p className="text-sm text-gray-500 px-3">Code Protection Suite</p>
         </div>
 
         <nav className="flex flex-col space-y-3">
           <NavLink
             to="/obfuscation"
+            end
             className={({ isActive }) =>
               `${navBase} ${isActive
                 ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
@@ -24,20 +25,15 @@ function Sidebar() {
               }`
             }
           >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/upload'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
+            <div className="p-2 rounded-lg transition-colors bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700">
               <Plus className="w-4 h-4" />
             </div>
             <span className="font-medium">New Obfuscation</span>
           </NavLink>
-          {/* Separator */}
-          <div className="my-4">
-            <div className="border-t border-gray-200"></div>
-         </div>
+
           <NavLink
             to="/configuration"
+            end
             className={({ isActive }) =>
               `${navBase} ${isActive
                 ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
@@ -45,19 +41,34 @@ function Sidebar() {
               }`
             }
           >
-            <div className={`p-2 rounded-lg transition-colors ${window.location.pathname === '/configuration'
-              ? 'bg-gray-200 text-gray-800'
-              : 'bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-              }`}>
+            <div className="p-2 rounded-lg transition-colors bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700">
               <Sliders className="w-4 h-4" />
             </div>
             <span className="font-medium">Configuration</span>
           </NavLink>
-        </nav>  
+
+          {/* Separator */}
+          <div className="my-4 border-t border-gray-200"></div>
+
+          <NavLink
+            to="/obfuscation/output-directory"
+            end
+            className={({ isActive }) =>
+              `${navBase} ${isActive
+                ? "bg-gray-100 text-gray-900 border-r-2 border-gray-600"
+                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              }`
+            }
+          >
+            <div className="p-2 rounded-lg transition-colors bg-gray-50 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700">
+              <FolderOutput className="w-4 h-4" />
+            </div>
+            <span className="font-medium">Output Directory</span>
+          </NavLink>
+        </nav>
       </div>
     </aside>
   );
 }
 
 export default Sidebar;
-

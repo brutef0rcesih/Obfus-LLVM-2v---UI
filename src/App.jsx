@@ -7,6 +7,7 @@ import FileUploadSection from "./components/obfuscation/FileUploadSection";
 import Configuration from "./components/obfuscation/Configuration";
 import ConfigurationPage from "./components/pages/ConfigurationPage";
 import ProgressSection from "./components/obfuscation/ProgressSection";
+import OutputDirectory from "./components/pages/OutputDirectory";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path="/obfuscation/progress" element={<ProgressSection />} />
               <Route path="/obfuscation/result" element={<Obfuscation step="result" />} />
               <Route path="/obfuscation/configuration" element={<Configuration />} />
+              <Route path="/obfuscation/output-directory" element={<OutputDirectory />} />
               <Route path="/configuration" element={<ConfigurationPage />} />
             </Routes>
           </div>
@@ -34,7 +36,7 @@ function App() {
           <p className="font-medium text-sm">Version 2.0.0v</p>
           <p className="mt-1 text-xs">© 2025 Obfus-LLVM</p>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }

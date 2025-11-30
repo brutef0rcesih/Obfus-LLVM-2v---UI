@@ -263,12 +263,19 @@ const ConfigurationPage = () => {
 
     const renderCheck = (value) => {
         return value ? (
-            <span className="px-2 py-1 text-xs font-medium text-black  rounded-full">Enable</span>
-        ) : (
-            <span className="px-2 py-1 text-xs font-medium text-black rounded-full">Disable</span>
-        )
-    }
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-black  rounded-full">
 
+                Enabled
+                <Check className="w-3 h-3 text-green-600" />
+            </span>
+        ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-black  rounded-full">
+
+                Disabled
+                <X className="w-3 h-3 text-red-600" />
+            </span>
+        );
+    };
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-[95%] mx-auto px-6 py-6">
@@ -301,62 +308,91 @@ const ConfigurationPage = () => {
                         </div>
 
                         {/* Templates Table */}
-                        <div className="overflow-x-auto border border-gray-300 rounded-lg">
-                            <table className="min-w-full bg-white shadow-sm">
-                                <thead className="bg-gray-50 border-b border-gray-200">
+                        <div className="overflow-auto max-h-[70vh] border border-gray-300 rounded-lg">
+                            <table className="min-w-full bg-white border border-gray-300">
+                                <thead className="bg-gray-50 border-b border-gray-300 sticky top-0 z-30">
                                     <tr>
-                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap sticky left-0 bg-gray-50 z-10">
+                                        <th className="px-4 py-3 border border-gray-300 text-left text-xs font-semibold text-gray-700 whitespace-nowrap  ">
                                             Profile Name
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Preprocessor Tricks
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             String Encryption
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Function Virtualization
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Bogus Control Flow
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Opaque Predicates
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Control Flow Flattening
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Address Obfuscation
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Symbol Renaming
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap">
                                             Anti-Debug Protection
                                         </th>
-                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 tracking-wide whitespace-nowrap sticky right-0 bg-gray-50 z-10">
+                                        <th className="px-4 py-3 border border-gray-300 text-center text-xs font-semibold text-gray-700 whitespace-nowrap ">
                                             Actions
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-200">
+
+                                <tbody>
                                     {templates.map((template) => (
                                         <tr key={template.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-4 py-3 whitespace-nowrap sticky left-0 bg-white z-10">
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap ">
                                                 <span className="text-sm font-medium text-gray-700">{template.name}</span>
                                             </td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.preprocessorTrickery)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.stringEncryption)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.keyFunctionVirtualization)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.bogus)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.opaque)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.controlFlow)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.addressObfuscation)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.symbolRenaming)}</td>
-                                            <td className="px-4 py-3 whitespace-nowrap text-center">{renderCheck(template.settings.antiDebug)}</td>
 
-                                            <td className="px-4 py-3 text-center whitespace-nowrap sticky right-0 bg-white z-10">
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.preprocessorTrickery)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.stringEncryption)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.keyFunctionVirtualization)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.bogus)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.opaque)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.controlFlow)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.addressObfuscation)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.symbolRenaming)}
+                                            </td>
+
+                                            <td className="px-4 py-3 border border-gray-300 whitespace-nowrap text-center">
+                                                {renderCheck(template.settings.antiDebug)}
+                                            </td>
+
+                                            {/* Actions column */}
+                                            <td className="px-4 py-3 border border-gray-300 text-center whitespace-nowrap">
                                                 <div className="relative actions-dropdown flex justify-center">
                                                     <button
                                                         onClick={(e) => {
@@ -382,32 +418,29 @@ const ConfigurationPage = () => {
                                                                 View
                                                             </button>
 
-                                                            {template.type === 'custom' && (
-                                                                <>
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleEditTemplate(template);
-                                                                            setActiveDropdown(null);
-                                                                        }}
-                                                                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                                                                    >
-                                                                        <Edit3 className="w-3.5 h-3.5" />
-                                                                        Modify
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleDeleteTemplate(template.id);
-                                                                            setActiveDropdown(null);
-                                                                        }}
-                                                                        className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                                                                    >
-                                                                        <Trash2 className="w-3.5 h-3.5" />
-                                                                        Delete
-                                                                    </button>
-                                                                </>
-                                                            )}
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleEditTemplate(template);
+                                                                    setActiveDropdown(null);
+                                                                }}
+                                                                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                                                            >
+                                                                <Edit3 className="w-3.5 h-3.5" />
+                                                                Modify
+                                                            </button>
+
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleDeleteTemplate(template.id);
+                                                                    setActiveDropdown(null);
+                                                                }}
+                                                                className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                                                            >
+                                                                <Trash2 className="w-3.5 h-3.5" />
+                                                                Delete
+                                                            </button>
                                                         </div>
                                                     )}
                                                 </div>
@@ -417,6 +450,8 @@ const ConfigurationPage = () => {
                                 </tbody>
                             </table>
                         </div>
+
+
                     </>
                 ) : (
                     <>

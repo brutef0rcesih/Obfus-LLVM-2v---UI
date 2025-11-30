@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Settings, ChevronRight, Home, HelpCircle } from 'lucide-react'
+import { X, Check, HelpCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import UploadSidebar from '../Navbar/UploadSidebar'
 
@@ -117,76 +117,115 @@ const ParametersStep = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
+    <div className="h-screen bg-gray-50 flex flex-col ">
       {/* Main Layout - Sidebar and Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <UploadSidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} activeItem="configuration" />
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-6xl mx-auto py-3 px-6">
+        <div className="flex-1 ">
+          <div className="max-w-6xl mx-auto py-3 px-6 ">
             {/* Header */}
-            <h2 className="text-lg font-normal text-gray-900 mb-2">Select Configuration</h2>
+            <h2 className="text-md font-normal text-gray-900 mb-2">Select Configuration</h2>
 
             {/* Template Selection */}
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4">
-                <label className="text-md font-medium text-gray-700 whitespace-nowrap">
-                  Select Template Type <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={templateType}
-                  onChange={(e) => {
-                    setTemplateType(e.target.value);
-                    setSelectedConfig(e.target.value);
-                  }}
-                  className="flex-1 px-3 py-2 w-28 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors bg-white"
-                >
-                  <option value="">Choose a template type...</option>
-                  <option value="basic">Basic Protection</option>
-                  <option value="balanced">Balanced Protection</option>
-                  <option value="medium">Medium Security</option>
-                  <option value="ultra">Ultra Security</option>
-                  <option value="custom">Custom Configuration</option>
-                </select>
-              </div>
-            </div>
+         <div className="max-w-7xl mx-auto mb-3">
+  <div className="flex items-center gap-4">
+    <label className="text-md font-medium text-gray-700 whitespace-nowrap">
+      Select Template Type <span className="text-red-500">*</span>
+    </label>
+
+    <select
+      value={templateType}
+      onChange={(e) => {
+        setTemplateType(e.target.value);
+        setSelectedConfig(e.target.value);
+      }}
+      className="px-3 py-2 border border-gray-300 rounded-lg 
+                 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 
+                 transition-colors bg-white"
+      style={{ width: "220px" }}   // <-- FIXED WIDTH HERE
+    >
+      <option value="">Choose a template type...</option>
+      <option value="basic">Basic Protection</option>
+      <option value="balanced">Balanced Protection</option>
+      <option value="medium">Medium Security</option>
+      <option value="ultra">Ultra Security</option>
+      <option value="custom">Custom Configuration</option>
+    </select>
+  </div>
+</div>
 
             {/* Configuration Display */}
-            <div className="max-w-4xl mx-auto mb-6">
+            <div className="max-w-7xl mx-auto mb-6">
               {templateType !== 'custom' && (
                 <>
-                  <div className="mb-4">
-                    <h3 className="text-md font-medium text-gray-900">Configure Selected</h3>
+                  <div className="mb-2">
+                    <h3 className="text-md font-medium text-gray-900">Configure Selected:</h3>
                   </div>
 
-                  <div className="border border-gray-200 rounded-lg shadow-sm bg-white w-full overflow-hidden">
-                    <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-200 py-3 px-4">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Method</div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Status</div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Settings</div>
+                  <div className="border border-gray-300 rounded-lg shadow-sm bg-white w-full overflow-hidden">
+                    {/* Header */}
+                    <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-300">
+                      <div className="text-xs font-semibold text-gray-700 tracking-wider  text-center px-4 py-3 border-r border-gray-300">
+                        Method
+                      </div>
+                      <div className="text-xs font-semibold text-gray-700 tracking-wider text-center px-4 py-3 border-r border-gray-300">
+                        Status
+                      </div>
+                      <div className="text-xs font-semibold text-gray-700 tracking-wider text-center px-4 py-3">
+                        Extent
+                      </div>
                     </div>
-                    <div className="divide-y divide-gray-100">
+
+                    {/* Body */}
+                    <div >
                       {(templateType && PRESETS[templateType] ? PRESETS[templateType].methods : PRESETS.ultra.methods).map((method, index) => (
-                        <div key={index} className="grid grid-cols-3 py-3 px-4 items-center hover:bg-gray-50 transition-colors">
-                          <div className="text-sm text-gray-900 font-medium">{method.name}</div>
-                          <div className="text-center">
+                        <div
+                          key={index}
+                          className="grid grid-cols-3 items-center hover:bg-gray-50 transition-colors border-b border-gray-300"
+                        >
+                          {/* Method Name */}
+                          <div className="text-sm text-gray-900   font-medium px-4 py-3 border-r border-gray-300">
+                            {method.name}
+                          </div>
+                          {/* Status */}
+                          <div className="text-center px-4 py-3 border-r border-gray-300">
                             {templateType ? (
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${method.enabled
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-gray-100 text-gray-600'
-                                }`}>
-                                {method.enabled ? 'Enabled' : 'Disabled'}
+                              <span
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-sm font-medium ${method.enabled
+                                  ? " text-black"
+                                  : " text-black"
+                                  }`}
+                              >
+                                {method.enabled ? (
+                                  <>
+
+                                    Enabled <Check className="w-3 h-3 text-green-600" />
+                                  </>
+                                ) : (
+                                  <>
+
+                                    Disabled <X className="w-3 h-3 text-red-600" />
+                                  </>
+                                )}
                               </span>
                             ) : (
                               <span className="text-sm text-gray-400">-</span>
                             )}
                           </div>
-                          <div className="text-right">
-                            {templateType && (method.strength !== undefined || method.value !== undefined) && method.enabled ? (
-                              <span className="text-sm text-gray-600">
-                                {method.strength !== undefined ? `Strength: ${method.strength}` : `Value: ${method.value}`}
+
+
+                          {/* Extent / Strength */}
+                          <div className="text-center px-4 py-3">
+                            {templateType &&
+                              (method.strength !== undefined || method.value !== undefined) &&
+                              method.enabled ? (
+                              <span className="text-sm text-black ">
+                                {method.strength !== undefined
+                                  ? `Strength: ${method.strength}`
+                                  : `Value: ${method.value}`}
                               </span>
                             ) : (
                               <span className="text-sm text-gray-400">-</span>
@@ -200,252 +239,180 @@ const ParametersStep = () => {
               )}
 
               {templateType === 'custom' && (
-                <div className="bg-white max-w-2xl border border-gray-200 rounded-lg p-5 shadow-sm">
-                  <h3 className="text-sm font-semibold text-gray-900 mb-4">Obfuscation Techniques</h3>
-                  <div className="space-y-6">
+                <div className="bg-white max-w-7xl  border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-gray-200 bg-gray-50">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Obfuscation Settings</h3>
+
                     {/* Obfuscation Cycles */}
-                    <div className="mb-6 pb-6 border-b border-gray-100">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm font-medium text-gray-900">Obfuscation Cycles</label>
+                    <div className="flex items-center gap-4">
+                      <label className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                        Number of Obfuscation Cycles
+                        <div className="group relative flex items-center">
+                          <HelpCircle className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+                          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-gray-800 text-white text-sm rounded shadow-lg z-20 pointer-events-none">
+                            <strong>Obfuscation Cycles</strong><br />
+                            What it does: Repeats the obfuscation process multiple times.<br />
+                            Effect: Increases complexity exponentially.<br />
+                            <span className="text-yellow-300">⚠ Performance impact: High. Increases build time and file size.</span>
+                          </div>
+                        </div>
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={customConfig.obfuscationCycles || 1}
+                        onChange={(e) => setCustomConfig({ ...customConfig, obfuscationCycles: parseInt(e.target.value) })}
+                        className="w-16 px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-900 focus:ring-gray-500 focus:border-gray-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-gray-200">
+                    {[
+                      { key: "preprocessorEnabled", label: "1. Preprocessor Tricks", help: "Enable preprocessor-based obfuscation techniques." },
+                      {
+                        key: "stringEncryptionEnabled", label: "2. String Encryption",
+                        help: (
+                          <>
+                            <strong className="text-xs">String Encryption</strong><br />
+                            What it does: Encrypts string literals and decrypts them at runtime.<br />
+                            Use for: API keys, messages, constants, embedded scripts.<br />
+                            <span className="text-yellow-300 text-xs">⚠ Performance impact: Minimal.</span>
+                          </>
+                        ),
+                        hasStrength: true, strengthKey: "stringEncryptionStrength",
+                        hasDropdown: true, dropdownKey: "stringEncryptionMethod", dropdownLabel: "Method:", options: ["xor", "aes", "rc4"]
+                      },
+                      {
+                        key: "virtualizationEnabled", label: "3. Function Virtualization",
+                        help: (
+                          <>
+                            <strong>Function Virtualization</strong><br />
+                            What it does: Converts selected functions into custom bytecode executed by a virtual machine.<br />
+                            Effect: Extremely strong protection.<br />
+                            Use for: Core logic, licensing routines, cryptographic code.<br />
+                            <span className="text-yellow-300 text-xs" >⚠ Performance impact: Medium–high depending on mode.</span>
+                          </>
+                        ),
+                        hasStrength: true, strengthKey: "virtualizationStrength",
+                        hasDropdown: true, dropdownKey: "virtualizationMode", dropdownLabel: "Mode:", options: ["light", "medium", "heavy"]
+                      },
+                      {
+                        key: "bogusCodeEnabled", label: "4. Bogus Control Flow",
+                        help: (
+                          <>
+                            <strong>Bogus Code Insertion</strong><br />
+                            What it does: Injects fake logic, dead branches, and unreachable blocks.<br />
+                            Effect: Makes static analysis significantly harder.<br />
+                            Recommended: Levels 5–8 for important functions.<br />
+                            <span className="text-yellow-300 text-xs">⚠ Performance impact: Low.</span>
+                          </>
+                        ),
+                        hasStrength: true, strengthKey: "bogusCodeLevel"
+                      },
+                      { key: "opaquePredicatesEnabled", label: "5. Opaque Predicates", help: "Add opaque predicates that are always true or false." },
+                      {
+                        key: "controlFlowEnabled", label: "6. Control Flow Flattening",
+                        help: (
+                          <>
+                            <strong>Control-Flow Flattening</strong><br />
+                            What it does: Converts structured logic (if/else/loops) into a single flat dispatcher.<br />
+                            Effect: Makes decompiled output look like spaghetti logic.<br />
+                            When to use: High-security builds.<br />
+                            Recommended: 5–8 for critical components.<br />
+                            <span className="text-yellow-300 text-xs">⚠ Performance impact: Can slow execution by 2–5×.</span>
+                          </>
+                        ),
+                        hasStrength: true, strengthKey: "controlFlowStrength"
+                      },
+                      { key: "addressObfuscationEnabled", label: "7. Address Obfuscation", help: "Obfuscate memory addresses." },
+                      {
+                        key: "symbolRenamingEnabled", label: "8. Symbol Renaming",
+                        help: (
+                          <>
+                            <strong>Symbol Renaming</strong><br />
+                            What it does: Replaces function/variable/class names with generated meaningless identifiers.<br />
+                            Effect: Prevents understanding of logic structure and intent.<br />
+                            Warning: May affect debugging if overused.
+                          </>
+                        ),
+                        hasStrength: true, strengthKey: "symbolRenamingStrength",
+                        hasDropdown: true, dropdownKey: "symbolRenamingScope", dropdownLabel: "Scope:", options: ["all", "public", "internal"]
+                      },
+                      { key: "antiDebugEnabled", label: "9. Anti-Debug Protection", help: "Add anti-debugging checks." },
+                    ].map((option) => (
+                      <div key={option.key} className="flex items-center gap-6 py-3 px-6 bg-white hover:bg-gray-50 transition-colors">
+                        {/* Checkbox */}
+                        <input
+                          type="checkbox"
+                          checked={customConfig[option.key] || false}
+                          onChange={(e) =>
+                            setCustomConfig({
+                              ...customConfig,
+                              [option.key]: e.target.checked,
+                            })
+                          }
+                          className="w-4 h-4 accent-gray-700 cursor-pointer"
+                        />
+
+                        {/* Title & Tooltip */}
+                        <div className="flex items-center gap-2 w-64">
+                          <span className="text-sm font-semibold text-gray-900">{option.label}</span>
                           <div className="group relative flex items-center">
-                            <HelpCircle className="w-3 h-3 text-gray-400 cursor-help" />
-                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-gray-800 text-white text-sm rounded shadow-lg z-20 pointer-events-none">
-                              <strong>Obfuscation Cycles</strong><br />
-                              What it does: Repeats the obfuscation process multiple times.<br />
-                              Effect: Increases complexity exponentially.<br />
-                              <span className="text-yellow-300">⚠ Performance impact: High. Increases build time and file size.</span>
+                            <HelpCircle className="w-3.5 h-3.5 text-gray-400 cursor-help" />
+                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-gray-100 text-gray-900 border border-gray-200 text-[10px] rounded shadow-lg z-20 pointer-events-none">
+                              {option.help}
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <input
-                            type="range"
-                            min="1"
-                            max="5"
-                            value={customConfig.obfuscationCycles || 1}
-                            onChange={(e) => setCustomConfig({ ...customConfig, obfuscationCycles: parseInt(e.target.value) })}
-                            className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                          />
-                          <span className="text-sm font-medium text-gray-900 w-6 text-right">
-                            {customConfig.obfuscationCycles || 1}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* 1. Preprocessor Tricks */}
-                    <div className="flex items-center justify-between py-2">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.preprocessorEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, preprocessorEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Preprocessor Tricks</label>
-                      </div>
-                    </div>
 
-                    {/* 2. String Encryption */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.stringEncryptionEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, stringEncryptionEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">String Encryption</label>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600">Strength: {customConfig.stringEncryptionStrength}</span>
-                          <input
-                            type="range"
-                            min="0"
-                            max="10"
-                            value={customConfig.stringEncryptionStrength}
-                            onChange={(e) => setCustomConfig({ ...customConfig, stringEncryptionStrength: parseInt(e.target.value) })}
-                            disabled={!customConfig.stringEncryptionEnabled}
-                            className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                          />
-                        </div>
-                        <select
-                          value={customConfig.stringEncryptionMethod}
-                          onChange={(e) => setCustomConfig({ ...customConfig, stringEncryptionMethod: e.target.value })}
-                          disabled={!customConfig.stringEncryptionEnabled}
-                          className="w-24 px-2 py-1 text-sm border border-gray-300 rounded-md bg-white focus:ring-gray-500 focus:border-gray-500"
-                        >
-                          <option value="xor">XOR</option>
-                          <option value="aes">AES</option>
-                          <option value="rc4">RC4</option>
-                        </select>
-                      </div>
-                    </div>
+                        {/* Controls */}
+                        {customConfig[option.key] && (
+                          <div className="flex items-center gap-6 flex-1">
+                            {option.hasStrength && (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">Strength:</span>
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="10"
+                                  value={customConfig[option.strengthKey] || 0}
+                                  onChange={(e) =>
+                                    setCustomConfig({
+                                      ...customConfig,
+                                      [option.strengthKey]: parseInt(e.target.value),
+                                    })
+                                  }
+                                  className="w-32 accent-gray-700 cursor-pointer"
+                                />
+                                <span className="text-sm text-gray-500 w-4">{customConfig[option.strengthKey]}</span>
+                              </div>
+                            )}
 
-                    {/* 3. Function Virtualization */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.virtualizationEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, virtualizationEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Function Virtualization</label>
+                            {option.hasDropdown && (
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-gray-600">{option.dropdownLabel}</span>
+                                <select
+                                  value={customConfig[option.dropdownKey]}
+                                  onChange={(e) =>
+                                    setCustomConfig({
+                                      ...customConfig,
+                                      [option.dropdownKey]: e.target.value,
+                                    })
+                                  }
+                                  className="px-2 py-1 text-sm border border-gray-300 rounded bg-white cursor-pointer focus:ring-gray-500 focus:border-gray-500"
+                                >
+                                  {option.options.map(opt => (
+                                    <option key={opt} value={opt}>{opt}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600">Strength: {customConfig.virtualizationStrength}</span>
-                          <input
-                            type="range"
-                            min="0"
-                            max="10"
-                            value={customConfig.virtualizationStrength}
-                            onChange={(e) => setCustomConfig({ ...customConfig, virtualizationStrength: parseInt(e.target.value) })}
-                            disabled={!customConfig.virtualizationEnabled}
-                            className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                          />
-                        </div>
-                        <select
-                          value={customConfig.virtualizationMode}
-                          onChange={(e) => setCustomConfig({ ...customConfig, virtualizationMode: e.target.value })}
-                          disabled={!customConfig.virtualizationEnabled}
-                          className="w-24 px-2 py-1 text-sm border border-gray-300 rounded-md bg-white focus:ring-gray-500 focus:border-gray-500"
-                        >
-                          <option value="light">Light</option>
-                          <option value="medium">Medium</option>
-                          <option value="heavy">Heavy</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* 4. Bogus Control Flow */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.bogusCodeEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, bogusCodeEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Bogus Control Flow</label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Strength: {customConfig.bogusCodeLevel}</span>
-                        <input
-                          type="range"
-                          min="0"
-                          max="10"
-                          value={customConfig.bogusCodeLevel}
-                          onChange={(e) => setCustomConfig({ ...customConfig, bogusCodeLevel: parseInt(e.target.value) })}
-                          disabled={!customConfig.bogusCodeEnabled}
-                          className="w-28 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                        />
-                      </div>
-                    </div>
-
-                    {/* 5. Opaque Predicates */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.opaquePredicatesEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, opaquePredicatesEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Opaque Predicates</label>
-                      </div>
-                    </div>
-
-                    {/* 6. Control Flow Flattening */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.controlFlowEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, controlFlowEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Control Flow Flattening</label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">Strength: {customConfig.controlFlowStrength}</span>
-                        <input
-                          type="range"
-                          min="0"
-                          max="10"
-                          value={customConfig.controlFlowStrength}
-                          onChange={(e) => setCustomConfig({ ...customConfig, controlFlowStrength: parseInt(e.target.value) })}
-                          disabled={!customConfig.controlFlowEnabled}
-                          className="w-28 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                        />
-                      </div>
-                    </div>
-
-                    {/* 7. Address Obfuscation */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.addressObfuscationEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, addressObfuscationEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Address Obfuscation</label>
-                      </div>
-                    </div>
-
-                    {/* 8. Symbol Renaming */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.symbolRenamingEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, symbolRenamingEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Symbol Renaming</label>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600">Strength: {customConfig.symbolRenamingStrength}</span>
-                          <input
-                            type="range"
-                            min="0"
-                            max="10"
-                            value={customConfig.symbolRenamingStrength}
-                            onChange={(e) => setCustomConfig({ ...customConfig, symbolRenamingStrength: parseInt(e.target.value) })}
-                            disabled={!customConfig.symbolRenamingEnabled}
-                            className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600"
-                          />
-                        </div>
-                        <select
-                          value={customConfig.symbolRenamingScope}
-                          onChange={(e) => setCustomConfig({ ...customConfig, symbolRenamingScope: e.target.value })}
-                          disabled={!customConfig.symbolRenamingEnabled}
-                          className="w-24 px-2 py-1 text-sm border border-gray-300 rounded-md bg-white focus:ring-gray-500 focus:border-gray-500"
-                        >
-                          <option value="all">All</option>
-                          <option value="public">Public</option>
-                          <option value="internal">Internal</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* 9. Anti-Debug */}
-                    <div className="flex items-center justify-between py-2 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={customConfig.antiDebugEnabled}
-                          onChange={(e) => setCustomConfig({ ...customConfig, antiDebugEnabled: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500 accent-gray-600"
-                        />
-                        <label className="text-sm font-medium text-gray-900">Anti-Debug Protection</label>
-                      </div>
-                    </div>
-
+                    ))}
                   </div>
                 </div>
               )}
