@@ -2,24 +2,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Download,
-  Shield,
-  CheckCircle,
-  FileCode,
-  Gauge,
+ 
   FileText,
   FileJson,
-  Clock,
-  Cpu,
-  Layers,
-  Zap,
+ 
 } from "lucide-react";
-
 import UploadSidebar from "../Navbar/UploadSidebar";
-import reportData from "../../data/obfuscation_report.json";
 
-const ResultSection = () => {
+
+const ResultSection = ({ reportData }) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [loading, setLoading] = useState(!reportData);
+  const [error, setError] = useState(null);
 
   const handleSidebarToggle = () => setSidebarOpen(!sidebarOpen);
 
@@ -44,30 +39,21 @@ const ResultSection = () => {
     link.click();
   };
 
-  const startTime = new Date(reportData.report_metadata.obfuscation_time);
-  const endTime = new Date(reportData.report_metadata.report_generation_time);
-  const executionTimeMs = endTime - startTime;
-  const executionTimeSec = (executionTimeMs / 1000).toFixed(2);
-
-  const avgSizeChange = Math.round(
-    reportData.files.reduce((acc, f) => acc + f.size_change_percent, 0) /
-    reportData.files.length
-  );
+  // If no data provided, show loading or error state
+  if (!reportData) {
+    return (
+      <div className="bg-gray-50 min-h-full flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Loading report data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
-      <div className="flex flex-1 overflow-hidden">
-        <UploadSidebar
-          isOpen={sidebarOpen}
-          onToggle={handleSidebarToggle}
-          activeItem="report"
-        />
-
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-7xl mx-auto p-6">
-
-            {/* HEADER */}
-            <div className="flex justify-between items-center mb-2">
+    <div className="bg-gray-50 min-h-full">
+      <div className="max-w-7xl mx-auto p-8">
+            <div className="flex justify-between items-center mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Obfuscation Report</h1>
                 <p className="text-sm text-gray-600 mt-1">
@@ -77,12 +63,10 @@ const ResultSection = () => {
                   ).toLocaleString()}
                 </p>
               </div>
-
             </div>
 
-            <div className="bg-gray-200 border border-gray-300 rounded-xl p-4 shadow-sm mb-2">
-
-              <div className="flex justify-between gap-3 ">
+            <div className="bg-gray-200 border border-gray-300 rounded-xl p-4 shadow-sm mb-6">
+              <div className="flex justify-between gap-3">
                 {/* PDF Button */}
                 <button
                   onClick={handleDownloadPdf}
@@ -108,197 +92,196 @@ const ResultSection = () => {
                 </button>
               </div>
 
-            </div>
+            </div>  
 
             <div className="space-y-6">
 
-              {/* ----- OVERVIEW CARD ----- */}
-              {/* ----- TOP ROW (Overview Left + Metrics Right) ----- */}
-              <div className="w-full flex flex-col lg:flex-row gap-2">
-
-                {/* ----- OVERVIEW CARD (LEFT) ----- */}
-                <div className="bg-white p-6 rounded-xl border border-gray-200 w-full lg:w-2/3">
-                  <h2 className="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-gray-700" />
-                    Overview
-                  </h2>
-
-                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-  {[
-    { label: "Status", value: reportData.report_metadata.status_of_obfuscation },
-    { label: "Profile", value: reportData.report_metadata.configuration_name.replace(/_/g, " ") },
-    { label: "Platform", value: reportData.report_metadata.target_platform },
-    { label: "Files", value: reportData.report_metadata.number_of_files },
-    { label: "Type", value: reportData.report_metadata.type_of_obfuscation },
-    { label: "Bogus Code", value: reportData.report_metadata.bogus_code_percent },
-    { label: "Cycles", value: reportData.report_metadata.number_of_cycles },
-    { 
-      label: "Techniques", 
-      value: `${reportData.configurations.filter(c => c.enabled === "Yes").length} Active` 
-    },
-  ].map((info, idx) => (
-    <div
-      key={idx}
-      className=" flex flex-col "
-    >
-      <span className="text-gray-500 text-sm font-medium">{info.label}</span>
-      <span className="text-gray-900 text font-semibold mt-1">{info.value}</span>
-    </div>
-  ))}
-</div>
-
-                  <div className="mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
-                    <span className="font-semibold">Reason: </span>
-                    {reportData.report_metadata.status_reason}
-                  </div>
+              {/* SUMMARY SECTION */}
+              <div className="bg-white border-2 border-gray-300 rounded-lg shadow-sm">
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300 px-6 py-4">
+                  <h2 className="text-xl font-bold text-gray-900">Summary</h2>
                 </div>
-
-                {/* ----- METRICS CARD (RIGHT) ----- */}
-                <div className="bg-white p-6 rounded-xl border border-gray-200 w-full lg:w-1/3">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Gauge className="h-5 w-5 text-gray-700" />
-                    Performance Metrics
-                  </h2>
-
-                  <div className="space-y-4">
-                    <Metric
-                      icon={<Clock className="h-5 w-5 text-gray-700" />}
-                      label="Execution Time"
-                      value={`${executionTimeSec}s`}
-                    />
-                    <Metric
-                      icon={<Layers className="h-5 w-5 text-gray-700" />}
-                      label="Avg Size Change"
-                      value={`+${avgSizeChange}%`}
-                    />
-                    <Metric
-                      icon={<Zap className="h-5 w-5 text-gray-700" />}
-                      label="Perf. Impact"
-                      value={reportData.report_metadata.number_of_cycles > 2 ? "Low" : "Medium"}
-                    />
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <SummaryItem label="Obfuscation time" value={`DATE: ${new Date(reportData.report_metadata.obfuscation_time).toLocaleDateString()} | TIME: ${new Date(reportData.report_metadata.obfuscation_time).toLocaleTimeString()}`} />
+                      <SummaryItem label="Type of Obfuscation" value={reportData.report_metadata.type_of_obfuscation} />
+                      <SummaryItem label="Configuration Name" value={reportData.report_metadata.configuration_name.replace(/_/g, " ")} labelColor="text-gray-700" />
+                      <SummaryItem label="Number of Cycles" value={`Cycle: ${reportData.report_metadata.number_of_cycles}`} labelColor="text-gray-700" />
+                      <SummaryItem label="Target Platform" value={reportData.report_metadata.target_platform} labelColor="text-gray-700" />
+                    </div>
+                    <div className="space-y-3">
+                      <SummaryItem label="Report generated time" value={`DATE: ${new Date(reportData.report_metadata.report_generation_time).toLocaleDateString()} | TIME: ${new Date(reportData.report_metadata.report_generation_time).toLocaleTimeString()}`} />
+                      <SummaryItem label="Number of files" value={reportData.report_metadata.number_of_files} />
+                      <SummaryItem label="Status of Obfuscation" value={reportData.report_metadata.status_of_obfuscation} labelColor="text-gray-700" />
+                      <SummaryItem label="Reason" value={reportData.report_metadata.status_reason} labelColor="text-gray-700" />
+                    </div>
                   </div>
-                </div>
-
-              </div>
-
-
-              {/* ----- TECHNIQUES ----- */}
-              <div className="bg-white p-6 rounded-xl border border-gray-200">
-                <h2 className="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <FileCode className="h-5 w-5 text-gray-700" />
-                  Applied Techniques
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {reportData.configurations
-                    .filter((cfg) => cfg.enabled === "Yes")
-                    .map((cfg, index) => (
-                      <div
-                        key={index}
-                        className="p-2 rounded-lg border border-gray-200 bg-gray-50"
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-semibold text-sm text-gray-900 ">
-                            {cfg.method_name}
-                          </h3>
-                          <CheckCircle className="h-4 w-4 text-gray-600" />
-                        </div>
-
-                        <div className="text-sm text-gray-600 font-mono break-all">
-                          {cfg.parameters
-                            .split(";")
-                            .map((param, i) => (
-                              <span key={i} className="text-sm block mb-1">
-                                • {param.trim()}
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
                 </div>
               </div>
 
-              {/* ----- FILE TABLE ----- */}
-<div className="bg-white p-6 rounded-xl border border-gray-200 shadow-md">
-  <h2 className="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-    <Cpu className="h-5 w-5  text-gray-700" />
-    File Processing Details
-  </h2>
-
-  <div className="overflow-x-auto border border-gray-300 rounded-lg shadow-inner">
-    <table className="min-w-full text-sm border-collapse table-fixed">
-      <thead className="bg-gray-100 text-gray-700  text-xs font-semibold sticky top-0 z-10 border-b border-gray-300">
-        <tr>
-          <th className="px-4 py-3 text-sm border border-gray-300">File</th>
-          <th className="px-4 py-3 text-sm border border-gray-300">Type</th>
-          <th className="px-4 py-3 text-sm border border-gray-300">Size Change</th>
-          <th className="px-4 py-3 text-sm border border-gray-300">Memory</th>
-          <th className="px-4 py-3 text-sm border border-gray-300">String Obfuscation</th>
-          <th className="px-4 py-3 text-sm border border-gray-300">Fake Loops</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {reportData.files.map((f, idx) => (
-          <tr
-            key={f.s_no}
-            className={`transition-colors ${
-              idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-            } hover:bg-gray-200`}
-          >
-            <td className="px-2 py-1 text-sm border border-gray-300 font-medium text-gray-900">
-              {f.input_file_name}
-              <spam className="text-xs text-gray-500 pl-3">→ {f.output_file_name}</spam>
-            </td>
-            <td className="px-2 py-1 text-sm border text-center border-gray-300 text-gray-700">{f.input_file_type}</td>
-            <td className="px-2 py-1 text-sm border text-center border-gray-300 text-gray-700">+{f.size_change_percent}%</td>
-            <td className="px-2 py-1 text-sm border text-center border-gray-300 text-gray-700">{f.memory_usage_mb} MB</td>
-            <td className="px-2 py-1 text-sm border text-center border-gray-300 text-gray-700">{f.num_string_obfuscations}</td>
-            <td className="px-4 py-3 text-sm border text-center border-gray-300 text-gray-700">{f.num_fake_look_inserted}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-              {/* ----- PATHS ----- */}
-              <div className="bg-gray-100 p-4 rounded-lg border border-gray-300 text-xs text-gray-700 flex flex-col sm:flex-row justify-between gap-2">
-                <div>
-                  <span className="font-semibold">Input Root:</span>{" "}
-                  {reportData.paths.input_root_path}
+              {/* OUTPUT PATHS */}
+              <div className="bg-white border-2 border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="space-y-2 text-sm">
+                  <div className="flex gap-2">
+                    <span className="font-bold text-gray-700">Output file path:</span>
+                    <span className="text-gray-700">{reportData.paths.output_root_path}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="font-bold text-gray-700">Input Root:</span>
+                    <span className="text-gray-700">{reportData.paths.input_root_path}</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-semibold">Output Root:</span>{" "}
-                  {reportData.paths.output_root_path}
+              </div>
+
+
+              {/* OBFUSCATION SUMMARY TABLE */}
+              <div className="bg-white border-2 border-gray-300 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300 px-6 py-4">
+                  <h2 className="text-xl font-bold text-gray-900">Obfuscation Summary</h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100 border-b-2 border-gray-300">
+                      <tr>
+                        <th className="px-6 py-3 text-left font-bold text-gray-700 border-r border-gray-300">Obfuscation Methods (Name)</th>
+                        <th className="px-6 py-3 text-center font-bold text-gray-700 border-r border-gray-300">Enabled</th>
+                        <th className="px-6 py-3 text-center font-bold text-gray-700 border-r border-gray-300">Disabled</th>
+                        <th className="px-6 py-3 text-left font-bold text-gray-700">Parameters (parameters used)</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {reportData.configurations.map((cfg, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="px-6 py-3 border-r border-gray-200 font-medium text-gray-900">{cfg.method_name}</td>
+                          <td className="px-6 py-3 text-center border-r border-gray-200">
+                            {cfg.enabled === "Yes" && <span className="text-green-600 text-xl">✓</span>}
+                          </td>
+                          <td className="px-6 py-3 text-center border-r border-gray-200">
+                            {cfg.enabled !== "Yes" && <span className="text-red-600 text-xl">✗</span>}
+                          </td>
+                          <td className="px-6 py-3 text-gray-700">{cfg.parameters}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* PER-FILE DETAILS */}
+              <div className="bg-white border-2 border-gray-300 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300 px-6 py-4">
+                  <h2 className="text-xl font-bold text-gray-900">Per-file Details</h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100 border-b-2 border-gray-300">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-gray-700 border-r border-gray-300">Input File name</th>
+                        <th className="px-4 py-3 text-left font-bold text-gray-700 border-r border-gray-300">Output file name</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700 border-r border-gray-300">Type of file</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700 border-r border-gray-300">File Size</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700 border-r border-gray-300">Number of String Obfuscations applied</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700">Number of fake look inserted</th>
+                      </tr>
+                      <tr className="bg-gray-50 border-b border-gray-300 text-xs">
+                        <th className="px-4 py-2 text-left font-semibold text-gray-600 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 text-left font-semibold text-gray-600 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 text-center font-semibold text-gray-600 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 text-center font-semibold text-gray-600 border-r border-gray-300">
+                          <div className="flex justify-around">
+                            <span>Input</span>
+                            <span>Output</span>
+                          </div>
+                        </th>
+                        <th className="px-4 py-2 text-center font-semibold text-gray-600 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 text-center font-semibold text-gray-600"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {reportData.files.map((file, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 border-r border-gray-200 text-gray-700 font-medium">{file.input_file_name}</td>
+                          <td className="px-4 py-3 border-r border-gray-200 text-gray-700 font-medium">{file.output_file_name}</td>
+                          <td className="px-4 py-3 text-center border-r border-gray-200">{file.input_file_type}</td>
+                          <td className="px-4 py-3 text-center border-r border-gray-200">
+                            <div className="flex justify-around">
+                              <span>{Math.round(file.memory_usage_mb * 1024 / (1 + file.size_change_percent/100))}</span>
+                              <span>{Math.round(file.memory_usage_mb * 1024)}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-center border-r border-gray-200">{file.num_string_obfuscations}</td>
+                          <td className="px-4 py-3 text-center">{file.num_fake_look_inserted}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* PERFORMANCE METRICS */}
+              <div className="bg-white border-2 border-gray-300 rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-300 px-6 py-4">
+                  <h2 className="text-xl font-bold text-gray-900">Performance Metrics</h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-100 border-b-2 border-gray-300">
+                      <tr>
+                        <th className="px-4 py-3 text-left font-bold text-gray-700 border-r border-gray-300">Input File</th>
+                        <th className="px-4 py-3 text-left font-bold text-gray-700 border-r border-gray-300">Output File</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700 border-r border-gray-300">File Size (Bytes)</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700 border-r border-gray-300">Size change (%)</th>
+                        <th className="px-4 py-3 text-center font-bold text-gray-700">Size differs (Bytes)</th>
+                      </tr>
+                      <tr className="bg-gray-50 border-b border-gray-300 text-xs">
+                        <th className="px-4 py-2 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 border-r border-gray-300"></th>
+                        <th className="px-4 py-2 text-center border-r border-gray-300">
+                          <div className="flex justify-around">
+                            <span>Input</span>
+                            <span>Output</span>
+                          </div>
+                        </th>
+                        <th className="px-4 py-2 border-r border-gray-300"></th>
+                        <th className="px-4 py-2"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {reportData.files.map((file, index) => {
+                        const inputSize = Math.round(file.memory_usage_mb * 1024 / (1 + file.size_change_percent/100));
+                        const outputSize = Math.round(file.memory_usage_mb * 1024);
+                        return (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="px-4 py-3 border-r border-gray-200 text-gray-700 font-medium">{file.input_file_name}</td>
+                            <td className="px-4 py-3 border-r border-gray-200 text-gray-700 font-medium">{file.output_file_name}</td>
+                            <td className="px-4 py-3 text-center border-r border-gray-200">
+                              <div className="flex justify-around">
+                                <span>{inputSize}</span>
+                                <span>{outputSize}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-center border-r border-gray-200">{file.size_change_percent}% increases</td>
+                            <td className="px-4 py-3 text-center">{outputSize - inputSize}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
             </div>
           </div>
-        </div>
-      </div>
     </div>
   );
 };
 
-/* Small helper components */
-const Info = ({ label, value }) => (
-  <div>
-    <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{label}</p>
-    <p className="text-gray-900 font-semibold mt-1">{value}</p>
-  </div>
-);
-
-const Metric = ({ icon, label, value }) => (
-  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-    <div className="flex items-center gap-3">
-      <div className="p-2 rounded-lg bg-gray-200 text-gray-700">{icon}</div>
-      <div>
-        <p className="text-xs text-gray-500">{label}</p>
-        <p className="text-lg font-semibold text-gray-900">{value}</p>
-      </div>
-    </div>
+/* Helper Components */
+const SummaryItem = ({ label, value, labelColor = "text-gray-700" }) => (
+  <div className="flex gap-2 text-sm">
+    <span className={`font-bold ${labelColor}`}>{label}:</span>
+    <span className="text-gray-900">{value}</span>
   </div>
 );
 

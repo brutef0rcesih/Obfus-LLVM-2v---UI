@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { X, Check, HelpCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { invoke } from '@tauri-apps/api/core'
 import UploadSidebar from '../Navbar/UploadSidebar'
 
 const ParametersStep = () => {
   const [selectedConfig, setSelectedConfig] = useState('')
   const [templateType, setTemplateType] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeTooltip, setActiveTooltip] = useState(null)
+  const [templates, setTemplates] = useState([])
+  const [selectedTemplate, setSelectedTemplate] = useState(null)
   const navigate = useNavigate()
+
+  // Load templates from backend on mount
+  useEffect(() => {
+    loadTemplates()
+  }, [])
+
+  const loadTemplates = async () => {
+    try {
+      const content = await invoke('load_config_templates')
+      const data = JSON.parse(content)
+      setTemplates(data.templates || [])
+    } catch (error) {
+      console.error('Error loading templates:', error)
+      setTemplates([])
+    }
+  }
 
   // Custom configuration state
   const [customConfig, setCustomConfig] = useState({
@@ -33,10 +51,6 @@ const ParametersStep = () => {
     upxEnabled: false
   })
 
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-
   const handleHomeClick = () => {
     navigate('/')
   }
@@ -45,87 +59,31 @@ const ParametersStep = () => {
     navigate('/obfuscation/upload')
   }
 
-  const PRESETS = {
-    basic: {
-      label: "Basic Protection",
-      description: "Essential protection with minimal performance impact.",
-      methods: [
-        { name: "Anti-Debug", enabled: false },
-        { name: "UPX Compression", enabled: false },
-        { name: "Function Virtualization", enabled: false },
-        { name: "Preprocessor Tricks", enabled: true },
-        { name: "String Encryption", enabled: true, strength: 10 },
-        { name: "Bogus Control Flow", enabled: false },
-        { name: "Opaque Predicates", enabled: false },
-        { name: "Control Flow Flattening", enabled: false },
-        { name: "Address Obfuscation", enabled: false },
-        { name: "Symbol Renaming", enabled: true },
-        { name: "Obfuscation Cycles", enabled: true, value: 1 }
-      ]
-    },
-    balanced: {
-      label: "Balanced Protection",
-      description: "Good balance between security and performance.",
-      methods: [
-        { name: "Anti-Debug", enabled: true },
-        { name: "UPX Compression", enabled: false },
-        { name: "Function Virtualization", enabled: false },
-        { name: "Preprocessor Tricks", enabled: true },
-        { name: "String Encryption", enabled: true },
-        { name: "Bogus Control Flow", enabled: true },
-        { name: "Opaque Predicates", enabled: true },
-        { name: "Control Flow Flattening", enabled: false },
-        { name: "Address Obfuscation", enabled: false },
-        { name: "Symbol Renaming", enabled: true },
-        { name: "Obfuscation Cycles", enabled: true, value: 1 }
-      ]
-    },
-    medium: {
-      label: "Medium Security",
-      description: "Stronger protection for sensitive applications.",
-      methods: [
-        { name: "Anti-Debug", enabled: true },
-        { name: "UPX Compression", enabled: false },
-        { name: "Function Virtualization", enabled: false },
-        { name: "Preprocessor Tricks", enabled: true },
-        { name: "String Encryption", enabled: true },
-        { name: "Bogus Control Flow", enabled: true, strength: 5 },
-        { name: "Opaque Predicates", enabled: true },
-        { name: "Control Flow Flattening", enabled: true, strength: 5 },
-        { name: "Address Obfuscation", enabled: true },
-        { name: "Symbol Renaming", enabled: true },
-        { name: "Obfuscation Cycles", enabled: true, value: 1 }
-      ]
-    },
-    ultra: {
-      label: "Ultra Security",
-      description: "Maximum security with multiple passes and virtualization.",
-      methods: [
-        { name: "Anti-Debug", enabled: true },
-        { name: "UPX Compression", enabled: true },
-        { name: "Function Virtualization", enabled: true, strength: 10 },
-        { name: "Preprocessor Tricks", enabled: true },
-        { name: "String Encryption", enabled: true, strength: 10 },
-        { name: "Bogus Control Flow", enabled: true, strength: 10 },
-        { name: "Opaque Predicates", enabled: true },
-        { name: "Control Flow Flattening", enabled: true, strength: 10 },
-        { name: "Address Obfuscation", enabled: true },
-        { name: "Symbol Renaming", enabled: true, strength: 10 },
-        { name: "Obfuscation Cycles", enabled: true, value: 2 }
-      ]
-    }
+  // Convert template settings to display format
+  const getMethodsFromTemplate = (template) => {
+    if (!template || !template.settings) return []
+    
+    const s = template.settings
+    return [
+      { name: "Anti-Debug", enabled: s.antiDebug || false },
+      { name: "UPX Compression", enabled: s.upx || false },
+      { name: "Function Virtualization", enabled: s.functionVM || s.keyFunctionVirtualization || false, strength: s.virtualizationStrength > 0 ? s.virtualizationStrength : undefined },
+      { name: "Preprocessor Tricks", enabled: s.preprocessorTrickery || false },
+      { name: "String Encryption", enabled: s.stringEncryption || false, strength: s.stringEncryptionStrength > 0 ? s.stringEncryptionStrength : undefined },
+      { name: "Bogus Control Flow", enabled: s.bogus || false, strength: s.bogusStrength > 0 ? s.bogusStrength : undefined },
+      { name: "Opaque Predicates", enabled: s.opaque || false },
+      { name: "Control Flow Flattening", enabled: s.controlFlow || false, strength: s.controlFlowStrength > 0 ? s.controlFlowStrength : undefined },
+      { name: "Address Obfuscation", enabled: s.addressObfuscation || false },
+      { name: "Symbol Renaming", enabled: s.symbolRenaming || false, strength: s.symbolRenamingStrength > 0 ? s.symbolRenamingStrength : undefined },
+      { name: "Obfuscation Cycles", enabled: true, value: s.obfuscationCycles || 1 }
+    ]
   }
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col ">
       {/* Main Layout - Sidebar and Content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <UploadSidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} activeItem="configuration" />
-
-        {/* Main Content */}
-        <div className="flex-1 ">
-          <div className="max-w-6xl mx-auto py-3 px-6 ">
+      <div className="bg-gray-50 min-h-full">
+        <div className="max-w-6xl mx-auto py-3 px-6">
             {/* Header */}
             <h2 className="text-md font-normal text-gray-900 mb-2">Select Configuration</h2>
 
@@ -139,19 +97,29 @@ const ParametersStep = () => {
     <select
       value={templateType}
       onChange={(e) => {
-        setTemplateType(e.target.value);
-        setSelectedConfig(e.target.value);
+        const value = e.target.value;
+        setTemplateType(value);
+        setSelectedConfig(value);
+        
+        // Find and set the selected template
+        if (value !== 'custom') {
+          const template = templates.find(t => t.type === value || t.name.toLowerCase() === value);
+          setSelectedTemplate(template);
+        } else {
+          setSelectedTemplate(null);
+        }
       }}
       className="px-3 py-2 border border-gray-300 rounded-lg 
                  focus:ring-2 focus:ring-gray-500 focus:border-gray-500 
                  transition-colors bg-white"
-      style={{ width: "220px" }}   // <-- FIXED WIDTH HERE
+      style={{ width: "220px" }}
     >
       <option value="">Choose a template type...</option>
-      <option value="basic">Basic Protection</option>
-      <option value="balanced">Balanced Protection</option>
-      <option value="medium">Medium Security</option>
-      <option value="ultra">Ultra Security</option>
+      {templates.map((template) => (
+        <option key={template.id} value={template.type || template.name.toLowerCase()}>
+          {template.name}
+        </option>
+      ))}
       <option value="custom">Custom Configuration</option>
     </select>
   </div>
@@ -181,7 +149,7 @@ const ParametersStep = () => {
 
                     {/* Body */}
                     <div >
-                      {(templateType && PRESETS[templateType] ? PRESETS[templateType].methods : PRESETS.ultra.methods).map((method, index) => (
+                      {(selectedTemplate ? getMethodsFromTemplate(selectedTemplate) : []).map((method, index) => (
                         <div
                           key={index}
                           className="grid grid-cols-3 items-center hover:bg-gray-50 transition-colors border-b border-gray-300"
@@ -459,7 +427,6 @@ const ParametersStep = () => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   )
 }

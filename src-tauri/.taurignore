@@ -1,0 +1,3 @@
+# Ignore data directory to prevent rebuilds when config files change
+src/data/config-templates.json
+src/data/*.json

@@ -7,8 +7,28 @@
   ],
   "permissions": [
     "core:default",
+    "core:path:default",
     "opener:default",
     "notification:default",
-    "notification:allow-request-permission"
+    "notification:allow-request-permission",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:default",
+    "fs:default",
+    "fs:allow-read-text-file",
+    "fs:allow-write-text-file",
+    "fs:allow-exists",
+    "fs:allow-mkdir",
+    "fs:allow-read-dir",
+    "fs:allow-app-meta",
+    "fs:allow-app-meta-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$RESOURCE/../**"
+        }
+      ]
+    }
   ]
 }

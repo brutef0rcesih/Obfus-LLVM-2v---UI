@@ -1,12 +1,10 @@
 import { useState, useRef } from 'react'
 import { Upload, FileCode, X, ChevronRight, Home, Search, ArrowUpDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import UploadSidebar from '../Navbar/UploadSidebar'
 
 const FileUploadSection = () => {
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [internalFiles, setInternalFiles] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [sortOrder, setSortOrder] = useState('asc')
@@ -26,8 +24,6 @@ const FileUploadSection = () => {
   const filteredFiles = sortedFiles.filter(file =>
     file.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
-
-  const handleSidebarToggle = () => setSidebarOpen(!sidebarOpen)
 
   const handleFileSelect = (event) => {
     const selectedFiles = Array.from(event.target.files)
@@ -80,14 +76,8 @@ const FileUploadSection = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
-
-
-      <div className="flex flex-1 overflow-hidden">
-        <UploadSidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
-
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-6xl mx-auto p-6">
+    <div className="bg-gray-50 min-h-full">
+      <div className="max-w-6xl mx-auto p-6">
             <div className="mb-6">
               <label className="text-lg font-medium text-gray-700 flex items-center space-x-2 mb-3">
                 <FileCode className="h-4 w-4" />
@@ -239,11 +229,8 @@ const FileUploadSection = () => {
               >
                 Select Configuration
               </button>
-            </div>
-
           </div>
         </div>
-      </div>
     </div>
   )
 }

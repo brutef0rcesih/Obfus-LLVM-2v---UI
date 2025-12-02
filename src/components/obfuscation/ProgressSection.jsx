@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, Home } from "lucide-react";
-import UploadSidebar from "../Navbar/UploadSidebar";
 
 const steps = [
   {
@@ -62,14 +61,11 @@ const ProgressSection = ({
   const [internalProgress, setInternalProgress] = useState(0);
   const [internalStage, setInternalStage] = useState("Initializing…");
   const [internalLogs, setInternalLogs] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const simulationRef = useRef(null);
 
   const progress = externalProgress || internalProgress;
   const currentStage = externalStage || internalStage;
   const logs = externalLogs?.length > 0 ? externalLogs : internalLogs;
-
-  const handleSidebarToggle = () => setSidebarOpen(!sidebarOpen);
 
   // Auto scroll logs
   useEffect(() => {
@@ -128,9 +124,9 @@ const ProgressSection = ({
   }, [progress, navigate]);
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
+    <div className="bg-gray-50 min-h-full">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-200 px-4 py-2.5 bg-white">
+      <div className="border-b border-gray-200 px-4 py-2.5 bg-white mb-6">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2 text-sm">
             <li>
@@ -178,11 +174,7 @@ const ProgressSection = ({
         </nav>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        <UploadSidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
-
-        <div className="flex-1 overflow-auto">
-          <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6">
+      <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6">
             {/* Progress Card */}
             <div className="mb-6">
               <label className="text-base font-semibold text-gray-800 mb-3 block">
@@ -264,11 +256,8 @@ const ProgressSection = ({
                   )}
                 </div>
               )}
-            </div>
-
           </div>
         </div>
-      </div>
     </div>
   );
 };
